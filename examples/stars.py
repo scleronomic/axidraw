@@ -1,9 +1,10 @@
-import axi
 import math
 import random
 
-from axi.spatial import Index
+import axidraw
+from axidraw.spatial import Index
 from poisson_disc import poisson_disc
+
 
 def perturb_points(points, deviation):
     result = []
@@ -15,6 +16,7 @@ def perturb_points(points, deviation):
         result.append((x, y))
     return result
 
+
 def star(x, y, r):
     sides = 5
     a = random.random() * 2 * math.pi
@@ -24,6 +26,7 @@ def star(x, y, r):
     points = perturb_points(points, 0.04)
     points.append(points[0])
     return points[0::2] + points[1::2]
+
 
 def main():
     points = poisson_disc(0, 0, 12, 8.5, 0.4, 64)
@@ -35,12 +38,11 @@ def main():
         index.insert((x1, y1))
         d = math.hypot(x2 - x1, y2 - y1)
         paths.append(star(x1, y1, d / 2))
-    drawing = axi.Drawing(paths)
+    drawing = axidraw.Drawing(paths)
     drawing = drawing.remove_paths_outside(12, 8.5)
     drawing = drawing.sort_paths()
     im = drawing.render()
-    im.write_to_png('out.png')
-    axi.draw(drawing)
+
 
 if __name__ == '__main__':
     main()

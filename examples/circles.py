@@ -33,10 +33,10 @@ def add(x, y, r, paths):
 def main():
     paths = []
     add(0, 0, 64, paths)
-    drawing = axi.Drawing(paths).rotate_and_scale_to_fit(11, 8.5).sort_paths()
+    drawing = axidraw.Drawing(paths).rotate_and_scale_to_fit(11, 8.5).sort_paths()
     im = drawing.render()
     im.write_to_png('out.png')
-    axi.draw(drawing)
+    axidraw.draw(drawing)
 
 if __name__ == '__main__':
     main()

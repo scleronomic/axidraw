@@ -1,12 +1,14 @@
-import axi
+import axidraw
 import math
 import random
 
 RULE = '23/3'
 
+
 class Generation(object):
     def __init__(self, grid=None):
         self.grid = grid or set()
+
     def randomize(self, w, h, p, seed=None):
         random.seed(seed)
         self.grid.clear()
@@ -19,12 +21,16 @@ class Generation(object):
                 p = p ** 1.5
                 if random.random() < p:
                     self.set(x, y)
+
     def set(self, x, y):
         self.grid.add((x, y))
+
     def unset(self, x, y):
         self.grid.discard((x, y))
+
     def get(self, x, y):
         return (x, y) in self.grid
+
     def count_neighbors(self, x, y):
         count = 0
         for dy in [-1, 0, 1]:
@@ -32,9 +38,11 @@ class Generation(object):
                 if (dx or dy) and (x + dx, y + dy) in self.grid:
                     count += 1
         return count
+
     def next(self):
         xs = [x for x, y in self.grid]
         ys = [y for x, y in self.grid]
+        print('xs', xs)
         minx = min(xs) - 1
         maxx = max(xs) + 1
         miny = min(ys) - 1
@@ -54,6 +62,7 @@ class Generation(object):
                         grid.add((x, y))
         return Generation(grid)
 
+
 def circle(cx, cy, r, n):
     points = []
     a0 = random.random() * 2 * math.pi
@@ -63,6 +72,7 @@ def circle(cx, cy, r, n):
         y = cy + math.sin(a) * r
         points.append((x, y))
     return points
+
 
 def circles(generations):
     paths = []
@@ -77,7 +87,8 @@ def circles(generations):
             if x < 36 or y < 40 or x >= 64 or y >= 60:
                 continue
             paths.append(circle(x, y, r, 200))
-    return axi.Drawing(paths)
+    return axidraw.Drawing(paths)
+
 
 def lines(generations):
     paths = []
@@ -93,22 +104,25 @@ def lines(generations):
             dx2 = random.gauss(0, 0.09)
             dy2 = random.gauss(0, 0.09)
             paths.append([(x + dx1, y + dy1), (x2 + dx2, y2 + dy2)])
-    return axi.Drawing(paths)
+    return axidraw.Drawing(paths)
+
 
 def main(seed):
-    n = 90/2
+    n = 90//2
     gs = []
     g = Generation()
     g.randomize(24, 24, 0.3, seed)
+    g.set(0, 0)
     for i in range(n + 10):
         gs.append(g)
         g = g.next()
     d = lines(gs[-n:])
     d = d.rotate_and_scale_to_fit(12, 8.5, step=90)
     d = d.sort_paths().join_paths(0.02)
-    im = d.render()
-    im.write_to_png('%06d.png' % seed)
-    axi.draw(d)
+    d.render()
+    # im.write_to_png('%06d.png' % seed)
+    # axidraw.draw(d)
+
 
 if __name__ == '__main__':
     main(16)

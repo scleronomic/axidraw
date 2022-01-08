@@ -61,7 +61,8 @@ class Bar(object):
         self.update(self.max_value)
         self.stop()
 
-    def stop(self):
+    @staticmethod
+    def stop():
         sys.stdout.write('\n')
         sys.stdout.flush()
 
@@ -82,12 +83,12 @@ class Bar(object):
         if self.min_value == 0:
             return '(%g of %g)' % (self.value, self.max_value)
         else:
-            return '(%g)' % (self.value)
+            return '(%g)' % self.value
 
     def render_bar(self, size=30):
         a = int(round(self.percent_complete / 100.0 * size))
         b = size - a
-        return '[' + '#' * a + '-'  * b + ']'
+        return '[' + '#' * a + '-' * b + ']'
 
     def render_elapsed_time(self):
         return pretty_time(self.elapsed_time)
@@ -96,12 +97,16 @@ class Bar(object):
         return pretty_time(self.eta)
 
 
-if __name__ == '__main__':
+def test():
     bar = Bar()
-    for i in bar(range(3517)):
+    for _ in bar(range(34517)):
         time.sleep(0.001)
     with Bar(1) as bar:
         for i in range(100):
             bar.update(i / 100.0)
             time.sleep(0.01)
         bar.done()
+
+
+if __name__ == '__main__':
+    test()

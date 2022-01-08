@@ -3,14 +3,14 @@ from setuptools import setup
 setup(
     name='axi',
     version='0.1',
-    description='Library for working with the AxiDraw v3 pen plotter.',
+    description='Library for working with the axidraw. v3 pen plotter.',
     author='Michael Fogleman',
     author_email='michael.fogleman@gmail.com',
     packages=['axi'],
     install_requires=['pyserial', 'shapely', 'pyhull', 'cairocffi'],
     entry_points={
         'console_scripts': [
-            'axi = axi.main:main'
+            'axi = axidraw.main:main'
         ]
     },
     license='MIT',

@@ -1,3 +1,8 @@
-pyserial~=3.5
-pyhull~=2015.2.1
-shapely~=1.8.0
+pyserial
+pyhull
+shapely
+
+pynput
+numpy
+pillow
+setuptools

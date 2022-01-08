@@ -132,8 +132,7 @@ def main():
             break
     d = drawing
     d = d.rotate_and_scale_to_fit(W, H, step=90)
-    d.dump('rush.axi')
-    d.render(bounds=None, show_bounds=False, scale=300).write_to_png('rush.png')
+    d.render(bounds=None, show_bounds=False, scale=300)
 
 
 if __name__ == '__main__':

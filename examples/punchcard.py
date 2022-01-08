@@ -1,9 +1,11 @@
-import axi
+import sys
 import csv
 import math
+import axidraw
 
 MIN_SIZE = 0.01
 MAX_SIZE = 0.8
+
 
 def circle(cx, cy, r, n):
     points = []
@@ -14,6 +16,7 @@ def circle(cx, cy, r, n):
         points.append((x, y))
     return points
 
+
 def fill_circle(cx, cy, cr, n):
     result = []
     r = cr
@@ -22,6 +25,7 @@ def fill_circle(cx, cy, cr, n):
         r -= 0.05
     result[-1].append((cx, cy))
     return result
+
 
 def punchcard_from_csv(csv_path):
     with open(csv_path, 'rb') as fp:
@@ -54,24 +58,24 @@ def punchcard_from_csv(csv_path):
             radius = (area / math.pi) ** 0.5
             paths.extend(fill_circle(c, r, radius, 90))
     for r, label in enumerate(row_labels):
-        d = axi.Drawing(axi.text(label.upper(), axi.TIMESR))
+        d = axidraw.Drawing(axidraw.text(label.upper(), axidraw.TIMESR))
         d = d.scale(0.02, 0.02).move(-1, r, 0.5, 0.5)
         paths.extend(d.paths)
     for c, label in enumerate(col_labels):
-        d = axi.Drawing(axi.text(label.upper(), axi.TIMESR))
+        d = axidraw.Drawing(axidraw.text(label.upper(), axidraw.TIMESR))
         d = d.scale(0.02, 0.02).move(c, -1, 0.5, 0.5)
         paths.extend(d.paths)
-    d = axi.Drawing(paths)
+    d = axidraw.Drawing(paths)
     d = d.scale_to_fit(12, 8.5)
 
-    print 'joining paths'
+    print('joining paths')
     d = d.join_paths(0.02)
-    print 'simplifying paths'
+    print('simplifying paths')
     d = d.simplify_paths(0.001)
 
-    d.render().write_to_png('out.png')
-    axi.draw(d)
+    d.render()
+    axidraw.draw(d)
+
 
 if __name__ == '__main__':
-    import sys
     punchcard_from_csv(sys.argv[1])

@@ -24,7 +24,7 @@ class Model(object):
         angle = atan2(dy, dx) + pi / 2
         dx = cos(angle)
         dy = sin(angle)
-        return (dx, dy)
+        return dx, dy
 
 
 def polygon(sides, d):
@@ -65,7 +65,8 @@ def main():
         paths.append(path)
 
     drawing = axidraw.Drawing(paths).sort_paths().simplify_paths(0.001)
-    axidraw.draw(drawing)
+    drawing.render()
+    # axidraw.draw(drawing)
 
 
 if __name__ == '__main__':

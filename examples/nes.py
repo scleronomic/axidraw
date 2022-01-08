@@ -1,13 +1,12 @@
-from __future__ import division, print_function
 
-import axi
+import axidraw
 import numpy as np
 import os
 import sys
 
 
 W, H = 11-2, 14-2
-DW, DH = axi.A3_SIZE
+DW, DH = axidraw.A3_SIZE
 
 NUMBER = '48'
 TITLE = 'Fifteen Seconds of The Legend of Zelda'
@@ -41,7 +40,7 @@ def simplify_sparkline(values, n):
     return result
 
 def stack_drawings(ds, spacing=0):
-    result = axi.Drawing()
+    result = axidraw.Drawing()
     y = 0
     for d in ds:
         d = d.origin().translate(-d.width / 2, y)
@@ -50,14 +49,14 @@ def stack_drawings(ds, spacing=0):
     return result
 
 def title():
-    d = axi.Drawing(axi.text(TITLE, axi.FUTURAM))
+    d = axidraw.Drawing(axidraw.text(TITLE, axidraw.FUTURAM))
     d = d.scale_to_fit_height(0.25)
     d = d.move(6, 8.5, 0.5, 1)
     d = d.join_paths(0.01)
     return d
 
 def label(x, y):
-    d = axi.Drawing(axi.text(LABEL, axi.FUTURAL))
+    d = axidraw.Drawing(axidraw.text(LABEL, axidraw.FUTURAL))
     d = d.scale_to_fit_height(0.125)
     d = d.rotate(-90)
     d = d.move(x, y, 1, 1)
@@ -133,7 +132,7 @@ def main():
             path.append((x, y))
         paths.append(path)
 
-    d = axi.Drawing(paths)
+    d = axidraw.Drawing(paths)
 
     # add title and label and fit to page
     d = d.scale(W / d.width, (H - 0.5) / d.height)

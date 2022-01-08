@@ -5,10 +5,10 @@ import math
 import random
 import sys
 
-BOUNDS = axi.A3_BOUNDS
+BOUNDS = axidraw.A3_BOUNDS
 
 def main():
-    d = axi.Drawing.load(sys.argv[1]).scale(1, -1)
+    d = axidraw.Drawing.load(sys.argv[1]).scale(1, -1)
     print(len(d.paths))
     d = d.join_paths(0.005)
     d = d.rotate_and_scale_to_fit(*BOUNDS[-2:])

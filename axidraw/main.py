@@ -1,5 +1,7 @@
-import axidraw
 import sys
+
+from axidraw.device import Device
+from axidraw.drawing import Drawing
 
 
 def main():
@@ -9,13 +11,13 @@ def main():
     command, args = args[0], args[1:]
     command = command.lower()
     if command == 'render':
-        d = axidraw.Drawing.load(args[0])
+        d = Drawing.load(args[0])
         d = d.rotate_and_scale_to_fit(12, 8.5, step=90)
         path = args[1] if len(args) > 1 else 'out.png'
         im = d.render()
         im.write_to_png(path)
         return
-    device = axidraw.Device()
+    device = Device()
     if command == 'zero':
         device.zero_position()
 
@@ -43,8 +45,8 @@ def main():
         device.goto(x, y)
 
     elif command == 'draw':
-        d = axidraw.Drawing.load(args[0])
-        axidraw.draw(d)
+        d = Drawing.load(args[0])
+        device.draw(d)  # TODO
 
     else:
         pass

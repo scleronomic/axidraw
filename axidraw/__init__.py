@@ -1,4 +1,4 @@
-from .device import Device
+from .device import Device, draw
 from .drawing import Drawing
 from .lindenmayer import LSystem
 from .paths import (
@@ -18,11 +18,12 @@ from .paths import (
 )
 from .planner import Planner
 from .turtle import Turtle
-from .util import draw, reset
 
 from .drawing import (
     V3_SIZE,
     V3_BOUNDS,
+    A4_SIZE,
+    A4_BOUNDS,
     A3_SIZE,
     A3_BOUNDS,
 )

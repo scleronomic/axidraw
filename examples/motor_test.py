@@ -13,7 +13,7 @@ def circle(cx, cy, radius, n, rotation):
     return points
 
 def main():
-    d = axi.Device()
+    d = axidraw.Device()
     d.pen_up()
     d.enable_motors()
     time.sleep(0.2)

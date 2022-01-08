@@ -2,6 +2,7 @@ import random
 
 from math import pi, sin, cos, hypot, floor
 
+
 class Grid(object):
     def __init__(self, r):
         self.r = r
@@ -32,6 +33,7 @@ class Grid(object):
         i, j = self.normalize(x, y)
         self.cells[(i, j)] = (x, y)
         return True
+
 
 def poisson_disc(x1, y1, x2, y2, r, n):
     x = x1 + (x2 - x1) / 2.0

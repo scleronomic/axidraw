@@ -1,27 +1,26 @@
-import axi
 import sys
 import textwrap
+import axidraw
 
 NUMBER = '34'
 LABEL = '#%s' % NUMBER
 
 TITLE = textwrap.wrap(
-    "Beta Subunit of the 20S Proteasome from T. acidophilum"
-, 36)
+    "Beta Subunit of the 20S Proteasome from T. acidophilum", 36)
 
 SUBTITLE = textwrap.wrap(
-    "These coordinates are from the 1995 crystal structure by Lowe et al. (Lowe et al., 1995). PDB entry 1PMA."
-    # "Coordinates from the 1995 crystal structure by Lowe et al. PDB entry 1PMA."
-, 60)
+    "These coordinates are from the 1995 crystal structure by Lowe et al. (Lowe et al., 1995). PDB entry 1PMA.", 60)
+
 
 def concat(ds):
-    result = axi.Drawing()
+    result = axidraw.Drawing()
     for d in ds:
         result.add(d)
     return result
 
-def stack_drawings(ds, spacing=0):
-    result = axi.Drawing()
+
+def stack_drawings(ds, spacing=0.0):
+    result = axidraw.Drawing()
     y = 0
     for d in ds:
         d = d.origin().translate(-d.width / 2, y)
@@ -29,8 +28,9 @@ def stack_drawings(ds, spacing=0):
         y += d.height + spacing
     return result
 
+
 def grid_drawings(ds, columns, spacing=0):
-    result = axi.Drawing()
+    result = axidraw.Drawing()
     w = max(d.width for d in ds) + spacing
     h = max(d.height for d in ds) + spacing
     for i, d in enumerate(ds):
@@ -42,8 +42,9 @@ def grid_drawings(ds, columns, spacing=0):
         result.add(d)
     return result
 
+
 def title():
-    ds = [axi.Drawing(axi.text(line, axi.TIMESIB)) for line in TITLE]
+    ds = [axidraw.Drawing(axidraw.text(line, axidraw.TIMESIB)) for line in TITLE]
     spacing = max(d.height for d in ds) * 1.5
     ds = [d.translate(-d.width / 2, i * spacing) for i, d in enumerate(ds)]
     d = concat(ds)
@@ -52,11 +53,12 @@ def title():
     d = d.join_paths(0.01)
     return d
 
+
 def subtitle():
-    # ds = [axi.Drawing(p) for p in axi.justify_text(SUBTITLE, axi.TIMESR)]
+    # ds = [axidraw.Drawing(p) for p in axidraw.justify_text(SUBTITLE, axidraw.TIMESR)]
     # spacing = max(d.height for d in ds) * 1.5
     # ds = [d.translate(0, i * spacing) for i, d in enumerate(ds)]
-    ds = [axi.Drawing(axi.text(line, axi.TIMESR)) for line in SUBTITLE]
+    ds = [axidraw.Drawing(axidraw.text(line, axidraw.TIMESR)) for line in SUBTITLE]
     spacing = max(d.height for d in ds) * 1.5
     ds = [d.translate(-d.width / 2, i * spacing) for i, d in enumerate(ds)]
     d = concat(ds)
@@ -65,13 +67,15 @@ def subtitle():
     d = d.join_paths(0.01)
     return d    
 
+
 def label():
-    d = axi.Drawing(axi.text(LABEL, axi.FUTURAL))
+    d = axidraw.Drawing(axidraw.text(LABEL, axidraw.FUTURAL))
     d = d.scale_to_fit_height(0.125)
     d = d.rotate(-90)
     d = d.move(12, 8.5, 1, 1)
     d = d.join_paths(0.01)
     return d
+
 
 def main():
     text = stack_drawings([title(), subtitle()], 0.3125)
@@ -88,27 +92,27 @@ def main():
         # 'ribbon/amyloid-beta/1iyt.txt',
     ]
     angles = [90, 90, 75, 60]
-    print 'loading paths'
+    print('loading paths')
     ds = []
     for filename, angle in zip(filenames, angles):
-        ds.append(axi.Drawing(axi.load_paths(filename)).scale(1, -1))
+        ds.append(axidraw.Drawing(axidraw.load_paths(filename)).scale(1, -1))
     # d = grid_drawings(ds, 2, 1)
     d = ds[0]
-    print len(d.paths)
-    print 'joining paths'
+    print(len(d.paths))
+    print('joining paths')
     d = d.join_paths(0.01)
-    print len(d.paths)
-    print 'transforming paths'
+    print(len(d.paths))
+    print('transforming paths')
     # d = d.scale(1, -1)
     d = d.rotate(180)
     d = d.rotate_and_scale_to_fit(8.5, 12 - text.height)
     # d = d.origin()
-    print 'sorting paths'
+    print('sorting paths')
     d = d.sort_paths()
-    print 'joining paths'
+    print('joining paths')
     d = d.join_paths(0.01)
-    print len(d.paths)
-    print 'simplifying paths'
+    print(len(d.paths))
+    print('simplifying paths')
     d = d.simplify_paths(0.001)
 
     # add title and label and fit to page
@@ -120,14 +124,9 @@ def main():
     # d.add(title())
     d.add(label())
 
-    print 'rendering paths'
-    d.render(line_width=0.25/25.4).write_to_png('out.png')
-    # axi.draw(d)
+    print('rendering paths')
+    d.render(line_width=0.25/25.4)
 
-    print d.bounds
-
-    d.dump('out.axi')
-    d.dump_svg('out.svg')
 
 if __name__ == '__main__':
     main()

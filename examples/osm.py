@@ -1,11 +1,12 @@
 from shapely import geometry, ops, affinity
 
-import axi
 import math
 import osm2shapely
 import sys
+import axidraw
 
 import logging
+
 logging.basicConfig()
 
 HOME = 35.768616, -78.844005
@@ -46,28 +47,6 @@ WEIGHTS = {
     # 'natural': 0,
 }
 
-def paths_to_shapely(paths):
-    return geometry.MultiLineString(paths)
-
-def shapely_to_paths(g):
-    if isinstance(g, geometry.Point):
-        return []
-    elif isinstance(g, geometry.LineString):
-        return [list(g.coords)]
-    elif isinstance(g, (geometry.MultiPoint, geometry.MultiLineString, geometry.MultiPolygon, geometry.collection.GeometryCollection)):
-        paths = []
-        for x in g:
-            paths.extend(shapely_to_paths(x))
-        return paths
-    elif isinstance(g, geometry.Polygon):
-        paths = []
-        paths.append(list(g.exterior.coords))
-        for interior in g.interiors:
-            paths.extend(shapely_to_paths(interior))
-        return paths
-    else:
-        raise Exception('unhandled shapely geometry: %s' % type(g))
-
 def follow(g, step):
     result = []
     d = step
@@ -82,8 +61,9 @@ def follow(g, step):
         d += step
     return result
 
+
 def hatch(g, angle, step):
-    print g.area
+    print(g.area)
     x0, y0, x1, y1 = g.bounds
     d = max(x1 - x0, y1 - y0) * 2
     lines = []
@@ -98,20 +78,24 @@ def hatch(g, angle, step):
     lines = affinity.translate(lines, (x0 + x1) / 2, (y0 + y1) / 2)
     return g.intersection(lines)
 
+
 def crop(g, w, h):
     return g.intersection(geometry.Polygon(box(w, h)))
+
 
 def box(w, h):
     w *= 0.5
     h *= 0.5
     return [(-w, -h), (w, -h), (w, h), (-w, h), (-w, -h)]
 
+
 def haversine(lat1, lng1, lat2, lng2):
     lng1, lat1, lng2, lat2 = map(math.radians, [lng1, lat1, lng2, lat2])
     dlng = lng2 - lng1
     dlat = lat2 - lat1
-    a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlng/2)**2
+    a = math.sin(dlat / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlng / 2) ** 2
     return math.asin(math.sqrt(a)) * 2 * EARTH_RADIUS_KM
+
 
 class LambertAzimuthalEqualAreaProjection(object):
     def __init__(self, lat, lng):
@@ -120,18 +104,20 @@ class LambertAzimuthalEqualAreaProjection(object):
         self.angle = math.radians(29)
         self.scale = 1
         self.scale = self.kilometer_scale()
+
     def project(self, lng, lat):
         lng, lat = math.radians(lng), math.radians(lat)
         clng, clat = math.radians(self.lng), math.radians(self.lat)
-        k = math.sqrt(2 / (1 + math.sin(clat)*math.sin(lat) + math.cos(clat)*math.cos(lat)*math.cos(lng-clng)))
-        x = k * math.cos(lat) * math.sin(lng-clng)
-        y = k * (math.cos(clat)*math.sin(lat) - math.sin(clat)*math.cos(lat)*math.cos(lng-clng))
+        k = math.sqrt(2 / (1 + math.sin(clat) * math.sin(lat) + math.cos(clat) * math.cos(lat) * math.cos(lng - clng)))
+        x = k * math.cos(lat) * math.sin(lng - clng)
+        y = k * (math.cos(clat) * math.sin(lat) - math.sin(clat) * math.cos(lat) * math.cos(lng - clng))
         rx = x * math.cos(self.angle) - y * math.sin(self.angle)
         ry = y * math.cos(self.angle) + x * math.sin(self.angle)
         x = rx
         y = ry
         s = self.scale
-        return (x * s, -y * s)
+        return x * s, -y * s
+
     def kilometer_scale(self):
         e = 1e-3
         lat, lng = self.lat, self.lng
@@ -142,10 +128,12 @@ class LambertAzimuthalEqualAreaProjection(object):
         sx = 2 / (x2 - x1)
         sy = 2 / (y1 - y2)
         return (sx + sy) / 2
+
     def transform(self, g):
         result = ops.transform(self.project, g)
         result.tags = g.tags
         return result
+
 
 def circle(cx, cy, r, n, revs=5):
     points = []
@@ -156,6 +144,7 @@ def circle(cx, cy, r, n, revs=5):
         y = cy + math.sin(a) * r
         points.append((x, y))
     return points
+
 
 def main():
     # parse osm file into shapely geometries
@@ -188,7 +177,7 @@ def main():
         elif 'building' in g.tags:
             gs.append(g)
 
-    print 'crop'
+    print('crop')
     gs = [crop(g, w * 1.1, h * 1.1) for g in gs]
     roads = [crop(g, w * 1.1, h * 1.1) for g in roads]
 
@@ -229,7 +218,7 @@ def main():
     #     g = crop(g, w * 1.1, h * 1.1)
     #     gs.append(g)
 
-    print 'union'
+    print('union')
     roads = ops.cascaded_union(roads)
     all_roads = []
     while not roads.is_empty:
@@ -238,7 +227,7 @@ def main():
     g = geometry.collection.GeometryCollection(gs + all_roads)
     g = paths_to_shapely(shapely_to_paths(g))
 
-    print 'crop'
+    print('crop')
     g = crop(g, w, h)
 
     paths = shapely_to_paths(g)
@@ -253,13 +242,14 @@ def main():
     for m in range(1):
         paths.append(box(w - s * m, h - s * m))
 
-    print 'axi'
-    d = axi.Drawing(paths)
+    print('axi')
+    d = axidraw.Drawing(paths)
     d = d.rotate_and_scale_to_fit(PAGE_WIDTH_IN, PAGE_HEIGHT_IN, step=90)
     d = d.sort_paths().join_paths(0.002).simplify_paths(0.002)
     im = d.render()
     im.write_to_png('out.png')
-    axi.draw(d)
+    axidraw.draw(d)
+
 
 if __name__ == '__main__':
     main()

@@ -1,9 +1,9 @@
-import axi
 import random
-
 from collections import defaultdict
 from math import pi, sin, cos, hypot, floor
 from shapely.geometry import LineString
+import axidraw
+
 
 class Grid(object):
     def __init__(self, r):
@@ -15,7 +15,7 @@ class Grid(object):
     def normalize(self, x, y):
         i = int(floor(x / self.size))
         j = int(floor(y / self.size))
-        return (i, j)
+        return i, j
 
     def nearby(self, x, y):
         points = []
@@ -48,15 +48,12 @@ class Grid(object):
         self.points.pop((i, j))
         self.lines.pop((i, j))
 
+
 def max_angle(i, d):
     if d < 0.1:
         return pi
     return pi / 4
-    a1 = 2 * pi
-    a2 = pi / 2
-    p = min(1, d / 20.0)
-    p = p ** 0.5
-    return a1 + (a2 - a1) * p
+
 
 def new_angle(a, d):
     if d < 0.1:
@@ -64,9 +61,11 @@ def new_angle(a, d):
     else:
         return random.gauss(a, pi / 10)
 
+
 def choice(items):
     p = random.random() ** 0.5
     return items[int(p * len(items))]
+
 
 def poisson_disc(x1, y1, x2, y2, r, n):
     grid = Grid(r)
@@ -83,9 +82,6 @@ def poisson_disc(x1, y1, x2, y2, r, n):
     while active:
         ax, ay, aa, ai, ad, ag = record = choice(active)
         for i in range(n):
-            # a = random.random() * 2 * pi
-            # a = aa + (random.random() * 2 - 1) * max_angle(ai, ad)
-            # a = random.gauss(aa, pi / 8)
             a = new_angle(aa, ad)
             d = random.random() * r + r
             x = ax + cos(a) * d
@@ -106,6 +102,7 @@ def poisson_disc(x1, y1, x2, y2, r, n):
             active.remove(record)
     return grid.points.values(), pairs
 
+
 def make_path(pairs):
     lookup = defaultdict(list)
     for parent, child in pairs:
@@ -124,13 +121,17 @@ def make_path(pairs):
         stack.append(child)
     return path
 
+
 def main():
     # random.seed(1182)
     points, pairs = poisson_disc(0, 0, 11, 8.5, 0.035, 32)
     path = make_path(pairs)
-    drawing = axi.Drawing([path]).scale_to_fit(11, 8.5)
-    # drawing.render().write_to_png('out.png')
-    axi.draw(drawing)
+
+    # drawing = axidraw.Drawing([path]).scale_to_fit(11, 8.5)
+    # axidraw.draw(drawing=drawing)
+
 
 if __name__ == '__main__':
-    main()
+    points, pairs = poisson_disc(0, 0, 11, 8.5, 0.035, 32)
+    path = make_path(pairs)
+    # main()

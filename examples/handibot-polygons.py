@@ -1,12 +1,13 @@
 from math import *
 from shapely import geometry, ops
-import axi
+import axidraw
 
 W = 6
 H = 8
 BOUNDS = (0, 0, W, H)
 
 BIT_RADIUS = 0.125
+
 
 def regular_polygon(n, x, y, r):
     points = []
@@ -16,12 +17,14 @@ def regular_polygon(n, x, y, r):
     points.append(points[0])
     return points
 
+
 def polygon_splits(n, x, y, r, b):
     lines = []
     for i in range(n):
         t = 2 * pi / n * (i + 0.5)
         lines.append([(x, y), (x + r * cos(t), y + r * sin(t))])
     return geometry.MultiLineString(lines).buffer(b)
+
 
 def polygon(n, r, br, notch=False):
     p = regular_polygon(n, 0, 0, r)
@@ -30,17 +33,18 @@ def polygon(n, r, br, notch=False):
     if notch:
         g = g.difference(polygon_splits(n, 0, 0, r * 2, br * 2))
         g = ops.linemerge(g)
-    p = axi.shapely_to_paths(g)
-    return axi.Drawing(p).origin()
+    p = axidraw.shapely_to_paths(g)
+    return axidraw.Drawing(p).origin()
+
 
 def drawings_to_gcode(ds, zs, z0, f):
     lines = []
-    lines.append('G90') # absolute coordinates
-    lines.append('G20') # inches
-    lines.append('G0 Z%g' % z0) # jog to z0
-    lines.append('M4') # turn on router
-    lines.append('G4 P2.0') # dwell for N seconds
-    lines.append('F%g' % f) # set feed rate (inches per minute)
+    lines.append('G90')  # absolute coordinates
+    lines.append('G20')  # inches
+    lines.append('G0 Z%g' % z0)  # jog to z0
+    lines.append('M4')  # turn on router
+    lines.append('G4 P2.0')  # dwell for N seconds
+    lines.append('F%g' % f)  # set feed rate (inches per minute)
     for d, z in zip(ds, zs):
         for path in d.paths:
             # jog to first point
@@ -57,6 +61,7 @@ def drawings_to_gcode(ds, zs, z0, f):
     lines.append('G0 X0 Y0')
     return '\n'.join(lines)
 
+
 def main():
     d0 = polygon(3, 3 / sqrt(3), BIT_RADIUS, False)
     d1 = polygon(3, 3 / sqrt(3), BIT_RADIUS, True)
@@ -69,7 +74,8 @@ def main():
     print(g)
 
     for i, (d, z) in enumerate(zip(ds, zs)):
-        d.render(bounds=BOUNDS).write_to_png('z%g.png' % z)
+        d.render(bounds=BOUNDS)
+
 
 if __name__ == '__main__':
     main()

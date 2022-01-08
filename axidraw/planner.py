@@ -223,8 +223,10 @@ class Throttler(object):
                 hi = v
         v = lo
         return v
+
     def compute_max_velocities(self):
         return [self.compute_max_velocity(i) for i in range(len(self.points))]
+
 
 def constant_acceleration_plan(points, a, vmax, cf):
     # make sure points are Point objects

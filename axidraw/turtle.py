@@ -9,7 +9,12 @@ def to_degrees(x):
 
 class Turtle(object):
     def __init__(self):
-        self.reset()
+        self.x = 0
+        self.y = 0
+        self.h = 0
+        self.pen = True
+        self._path = [(self.x, self.y)]
+        self._paths = []
 
     def reset(self):
         self.x = 0
@@ -60,7 +65,7 @@ class Turtle(object):
     def setx(self, x):
         self.goto(x, self.y)
 
-    def sety(self, x):
+    def sety(self, y):
         self.goto(self.x, y)
 
     def seth(self, heading):
@@ -114,7 +119,7 @@ class Turtle(object):
             self.seth(self.h - extent)
 
     def pos(self):
-        return (self.x, self.y)
+        return self.x, self.y
     position = pos
 
     def towards(self, x, y=None):

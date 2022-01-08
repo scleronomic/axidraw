@@ -1,5 +1,3 @@
-from __future__ import division, print_function
-
 import time
 
 from math import modf
@@ -19,11 +17,11 @@ STEP_DIVIDER = 2 ** (MICROSTEPPING_MODE - 1)
 STEPS_PER_INCH = 2032 / STEP_DIVIDER
 STEPS_PER_MM = 80 / STEP_DIVIDER
 
-PEN_UP_POSITION = 100
+PEN_UP_POSITION = 40
 PEN_UP_SPEED = 150
 PEN_UP_DELAY = 0
 
-PEN_DOWN_POSITION = 60
+PEN_DOWN_POSITION = 0
 PEN_DOWN_SPEED = 150
 PEN_DOWN_DELAY = 0
 
@@ -66,7 +64,7 @@ class Device(object):
 
         port = find_port()
         if port is None:
-            raise Exception('cannot find axidraw device')
+            raise Exception('cannot find axidraw. device')
         self.serial = Serial(port, timeout=1)
         self.configure()
 
@@ -173,11 +171,11 @@ class Device(object):
         self.run_plan(plan)
 
     def run_drawing(self, drawing, progress=True):
-        print('number of paths : %d' % len(drawing.paths))
-        print('pen down length : %g' % drawing.down_length)
-        print('pen up length   : %g' % drawing.up_length)
-        print('total length    : %g' % drawing.length)
-        print('drawing bounds  : %s' % str(drawing.bounds))
+        print(f"number of paths : {len(drawing.paths)}")
+        print(f"pen down length : {drawing.down_length}")
+        print(f"pen up length   : {drawing.up_length}")
+        print(f"total length    : {drawing.length}")
+        print(f"drawing bounds  : {str(drawing.bounds)}")
         self.pen_up()
         position = (0, 0)
         bar = Bar(drawing.length, enabled=progress)
@@ -213,8 +211,28 @@ class Device(object):
         delay = max(0, duration + self.pen_down_delay)
         return self.command('SP', 0, delay)
 
+    # util
+    def reset(self):
+        self.pen_up()
+        self.disable_motors()
 
-if __name__ == '__main__':
+    def draw(self, drawing, progress=True):
+        self.enable_motors()
+        self.run_drawing(drawing, progress)
+        self.disable_motors()
+
+
+def draw(drawing, progress=True):
+    device = Device()
+    device.draw(drawing=drawing, progress=progress)
+
+
+def main():
     device = Device()
     device.pen_up()
     device.home()
+    device.disable_motors()
+
+
+if __name__ == '__main__':
+    main()

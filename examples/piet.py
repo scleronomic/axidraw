@@ -1,14 +1,16 @@
 from shapely.geometry import LineString
-import axi
 import random
+import axidraw
 
 X1 = 0
 X2 = 11
 Y1 = 0
 Y2 = 8.5
 
+
 def make_segment(x1, y1, x2, y2):
     return LineString([(x1, y1), (x2, y2)])
+
 
 def intersections(segments, segment):
     result = []
@@ -20,6 +22,7 @@ def intersections(segments, segment):
             except Exception:
                 pass
     return result
+
 
 def new_segment(segments):
     if random.random() < 0.5:
@@ -37,9 +40,9 @@ def new_segment(segments):
         (x1, y1), (x2, y2) = random.sample(ixs, 2)
         return make_segment(x1, y1, x2, y2)
 
+
 def main():
-    # seed = random.randint(0, 99999999)
-    # print seed
+    # seed = random.randint(99999999)
     random.seed(82480774)
     segments = [
         make_segment(X1, Y1, X2, Y1),
@@ -54,11 +57,13 @@ def main():
     paths = []
     for segment in segments:
         paths.append(list(segment.coords))
-    d = axi.Drawing(paths)
+    d = axidraw.Drawing(paths)
     d = d.sort_paths()
     d = d.join_paths(0.001)
-    d.render().write_to_png('out.png')
-    axi.draw(d)
+    d.render()
+
+    # axidraw.draw(d)
+
 
 if __name__ == '__main__':
     main()

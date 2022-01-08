@@ -1,23 +1,27 @@
-from __future__ import division
+import numpy as np
+from wzk.mpl import new_fig
 
-from math import sin, cos, radians, hypot
-
-from .paths import (
-    simplify_paths, sort_paths, join_paths, crop_paths, convex_hull,
-    expand_quadratics, paths_length)
+from axidraw.paths import (simplify_paths, sort_paths, join_paths, crop_paths,
+                           convex_hull, expand_quadratics, paths_length)
 
 
 V3_SIZE = (12, 8.5)
-V3_BOUNDS = (0, 0, 12, 8.5)
+V3_BOUNDS = (0, 0, V3_SIZE[0], V3_SIZE[1])
+
+A4_SIZE = (11.69, 8.27)
+A4_BOUNDS = (0, 0, A4_SIZE[0], A4_SIZE[1])
 
 A3_SIZE = (16.93, 11.69)
-A3_BOUNDS = (0, 0, 16.93, 11.69)
+A3_BOUNDS = (0, 0, A3_SIZE[0], A3_SIZE[1])
 
 
 class Drawing(object):
     def __init__(self, paths=None):
         self.paths = paths or []
-        self.dirty()
+        self._bounds = None
+        self._length = None
+        self._down_length = None
+        self._hull = None
 
     def dirty(self):
         self._bounds = None
@@ -107,7 +111,7 @@ class Drawing(object):
             for p0, p1 in zip(self.paths, self.paths[1:]):
                 x0, y0 = p0[-1]
                 x1, y1 = p1[0]
-                length += hypot(x1 - x0, y1 - y0)
+                length += np.hypot(x1 - x0, y1 - y0)
             self._length = length
         return self._length
 
@@ -133,7 +137,7 @@ class Drawing(object):
 
     @property
     def size(self):
-        return (self.width, self.height)
+        return self.width, self.height
 
     @property
     def all_paths(self):
@@ -149,8 +153,8 @@ class Drawing(object):
     def simplify_paths(self, tolerance):
         return Drawing(simplify_paths(self.paths, tolerance))
 
-    def sort_paths(self, reversable=True):
-        return Drawing(sort_paths(self.paths, reversable))
+    def sort_paths(self, reversible=True):
+        return Drawing(sort_paths(self.paths, reversible))
 
     def join_paths(self, tolerance):
         return Drawing(join_paths(self.paths, tolerance))
@@ -158,8 +162,9 @@ class Drawing(object):
     def crop_paths(self, x1, y1, x2, y2):
         return Drawing(crop_paths(self.paths, x1, y1, x2, y2))
 
-    # def remove_duplicates(self):
-    #     return Drawing(util.remove_duplicates(self.paths))
+    def remove_duplicates(self):
+        pass
+        # TODO
 
     def add(self, drawing):
         self.paths.extend(drawing.paths)
@@ -170,21 +175,23 @@ class Drawing(object):
 
     def translate(self, dx, dy):
         def func(x, y):
-            return (x + dx, y + dy)
+            return x + dx, y + dy
         return self.transform(func)
 
     def scale(self, sx, sy=None):
         if sy is None:
             sy = sx
+
         def func(x, y):
-            return (x * sx, y * sy)
+            return x * sx, y * sy
         return self.transform(func)
 
     def rotate(self, angle):
-        c = cos(radians(angle))
-        s = sin(radians(angle))
+        c = np.cos(np.deg2rad(angle))
+        s = np.sin(np.deg2rad(angle))
+
         def func(x, y):
-            return (x * c - y * s, y * c + x * s)
+            return x * c - y * s, y * c + x * s
         return self.transform(func)
 
     def move(self, x, y, ax, ay):
@@ -243,34 +250,57 @@ class Drawing(object):
                 paths.append(path)
         return Drawing(paths)
 
-    # def render(self, scale=109, margin=1, line_width=0.35/25.4,
-    #         bounds=None, show_bounds=True):
-    #     bounds = bounds or self.bounds
-    #     x1, y1, x2, y2 = bounds
-    #     w = x2 - x1
-    #     h = y2 - y1
-    #     margin *= scale
-    #     width = int(scale * w + margin * 2)
-    #     height = int(scale * h + margin * 2)
-    #     surface = cairo.ImageSurface(cairo.FORMAT_RGB24, width, height)
-    #     dc = cairo.Context(surface)
-    #     dc.set_line_cap(cairo.LINE_CAP_ROUND)
-    #     dc.set_line_join(cairo.LINE_JOIN_ROUND)
-    #     dc.translate(margin, margin)
-    #     dc.scale(scale, scale)
-    #     dc.translate(-x1, -y1)
-    #     dc.set_source_rgb(1, 1, 1)
-    #     dc.paint()
-    #     if show_bounds:
-    #         dc.set_source_rgb(0.5, 0.5, 0.5)
-    #         dc.set_line_width(1 / scale)
-    #         dc.rectangle(x1, y1, w, h)
-    #         dc.stroke()
-    #     dc.set_source_rgb(0, 0, 0)
-    #     dc.set_line_width(line_width)
-    #     for path in self.paths:
-    #         dc.move_to(*path[0])
-    #         for x, y in path:
-    #             dc.line_to(x, y)
-    #     dc.stroke()
-    #     return surface
+    def render(self, scale=109, margin=1, line_width=0.35/25.4,
+               bounds=None, show_bounds=True,
+               ax=None):
+        bounds = bounds or self.bounds
+        x1, y1, x2, y2 = bounds
+        w = x2 - x1
+        h = y2 - y1
+        margin *= scale
+        width = scale * w + margin * 2
+        height = scale * h + margin * 2
+
+
+        # if show_bounds:
+        #     dc.set_source_rgb(0.5, 0.5, 0.5)
+        #     dc.set_line_width(1 / scale)
+        #     dc.rectangle(x1, y1, w, h)
+        #     dc.stroke()
+        # dc.set_line_width(line_width)
+        if ax is None:
+            fig, ax = new_fig(aspect=1)
+        for path in self.paths:
+            ax.plot(*np.array(path).T, color='black')
+
+        # for path in self.paths:
+        #     dc.move_to(*path[0])
+        #     for x, y in path:
+        #         dc.line_to(x, y)
+        # dc.stroke()
+        # return surface
+
+
+# from wzk import normalize_11
+
+
+def scale2(x, size, padding, mi=None, ma=None, keep_aspect=True):
+
+
+    size, padding = np.atleast_1d(size, padding)
+    scale = np.ones(2) * (size - 2 * padding)
+    if mi is None:
+        mi = np.array((x[..., 0].min(), x[..., 1].min()))
+    x -= mi
+
+    if ma is None:
+        ma = np.array((x[..., 0].max(), x[..., 1].max()))
+    else:
+        ma = ma - mi
+
+    scale = (scale / ma)
+    if keep_aspect:
+        scale = scale.min()
+    x *= scale
+    x += padding
+    return x

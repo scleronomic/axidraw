@@ -1,10 +1,10 @@
 # axi
 
-Unofficial Python library for working with the [AxiDraw v3](http://www.axidraw.com/) pen plotter.
+Unofficial Python library for working with the [axidraw. v3](http://www.axidraw.com/) pen plotter.
 
 ### Features
 
-- control AxiDraw v3 directly from Python with a simple API
+- control axidraw. v3 directly from Python with a simple API
 - convenient command-line utility
 - constant acceleration (trapezoidal velocity) motion planning
 - path drawing order optimization
@@ -40,7 +40,7 @@ axi goto X Y   # move to the (X, Y) absolute position
 
 `axi` is not yet available on PyPI, so installation works like this:
 
-    git clone https://github.com/fogleman/axi.git
+    git clone https://github.com/fogleman/axidraw.git
     cd axi
     pip install -e .
 
@@ -58,7 +58,7 @@ Use the turtle to draw a dragon curve, filling a standard US letter page.
 import axi
 
 def main(iteration):
-    turtle = axi.Turtle()
+    turtle = axidraw.Turtle()
     for i in range(1, 2 ** iteration):
         turtle.forward(1)
         if (((i & -i) << 1) & i) != 0:
@@ -66,7 +66,7 @@ def main(iteration):
         else:
             turtle.circle(1, 90, 36)
     drawing = turtle.drawing.rotate_and_scale_to_fit(11, 8.5, step=90)
-    axi.draw(drawing)
+    axidraw.draw(drawing)
 
 if __name__ == '__main__':
     main(12)

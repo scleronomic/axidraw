@@ -7,7 +7,7 @@ from collections import defaultdict
 from math import pi, sin, cos, hypot, floor
 from shapely.geometry import LineString
 
-W, H = axi.A3_SIZE
+W, H = axidraw.A3_SIZE
 
 def make_layer():
     x = layers.Noise(8).add(layers.Constant(0.6)).clamp()
@@ -134,12 +134,12 @@ def main():
     layer.save('layer.png', 0, 0, W, H, 50)
     points, pairs = poisson_disc(layer, 0, 0, W, H, 0.05, 8)
     path = make_path(pairs)
-    d = axi.Drawing([path])
+    d = axidraw.Drawing([path])
     # d = d.rotate_and_scale_to_fit(W, H, step=90)
     d = d.scale_to_fit(W, H)
     d.dump('growth.axi')
     d.render(bounds=(0, 0, W, H)).write_to_png('growth.png')
-    # axi.draw(d)
+    # axidraw.draw(d)
 
 if __name__ == '__main__':
     main()
