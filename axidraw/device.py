@@ -17,7 +17,7 @@ STEP_DIVIDER = 2 ** (MICROSTEPPING_MODE - 1)
 STEPS_PER_INCH = 2032 / STEP_DIVIDER
 STEPS_PER_MM = 80 / STEP_DIVIDER
 
-PEN_UP_POSITION = 40
+PEN_UP_POSITION = 80
 PEN_UP_SPEED = 150
 PEN_UP_DELAY = 0
 
@@ -26,7 +26,7 @@ PEN_DOWN_SPEED = 150
 PEN_DOWN_DELAY = 0
 
 ACCELERATION = 16
-MAX_VELOCITY = 4
+MAX_VELOCITY = 5  # 4
 CORNER_FACTOR = 0.001
 
 JOG_ACCELERATION = 16
@@ -231,6 +231,8 @@ def main():
     device = Device()
     device.pen_up()
     device.home()
+    device.pen_down()
+    device.pen_up()
     device.disable_motors()
 
 

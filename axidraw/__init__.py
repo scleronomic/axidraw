@@ -19,47 +19,6 @@ from .paths import (
 from .planner import Planner
 from .turtle import Turtle
 
-from .drawing import (
-    V3_SIZE,
-    V3_BOUNDS,
-    A4_SIZE,
-    A4_BOUNDS,
-    A3_SIZE,
-    A3_BOUNDS,
-)
+from .drawing import dinA_inch
 
 from .hershey import text, Font
-from .hershey_fonts import (
-    ASTROLOGY,
-    CURSIVE,
-    CYRILC_1,
-    CYRILLIC,
-    FUTURAL,
-    FUTURAM,
-    GOTHGBT,
-    GOTHGRT,
-    GOTHICENG,
-    GOTHICGER,
-    GOTHICITA,
-    GOTHITT,
-    GREEK,
-    GREEKC,
-    GREEKS,
-    JAPANESE,
-    MARKERS,
-    MATHLOW,
-    MATHUPP,
-    METEOROLOGY,
-    MUSIC,
-    ROWMAND,
-    ROWMANS,
-    ROWMANT,
-    SCRIPTC,
-    SCRIPTS,
-    SYMBOLIC,
-    TIMESG,
-    TIMESI,
-    TIMESIB,
-    TIMESR,
-    TIMESRB,
-)

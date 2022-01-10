@@ -35,12 +35,12 @@ x = np.array((x, y)).T
 
 
 import axidraw
-x = axidraw.drawing.scale2(x=x, size=axidraw.A3_SIZE, padding=2, keep_aspect=False)
+x = axidraw.drawing.scale2(x=x, size=axidraw.dinA_inch[3], padding=2, keep_aspect=False)
 
 
 fig, ax = new_fig(aspect=1)
-ax.set_xlim(0, axidraw.A3_SIZE[0])
-ax.set_ylim(0, axidraw.A3_SIZE[1])
+ax.set_xlim(0, axidraw.dinA_inch[3][0])
+ax.set_ylim(0, axidraw.dinA_inch[3][1])
 ax.plot(*x.T, color='black')
 
 path = [(xx[0], xx[1]) for xx in x]
