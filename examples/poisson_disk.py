@@ -14,10 +14,9 @@ def intersect(a, b, c, d):
 
 d = 2
 k = 100
-r = 0.005
+r = 0.05
 n = int(np.ceil(np.sqrt(d)/r))
 
-np.random.random()
 
 grid = np.full((n,)*d, -1)
 limits = np.array([[-1.0, +1.0],
@@ -120,7 +119,7 @@ def aaa(t):
     h = None
     active = [True] * len(x)
     count = 0
-    tree = Tree(root=x0, n=5000)
+    tree = Tree(root=x0, n=21000)
     while np.any(active):
         i = np.random.randint(0, np.sum(active))
         i = np.nonzero(active)[0][i]
@@ -138,8 +137,8 @@ def aaa(t):
                 phi = np.random.normal(loc=np.pi/2, scale=t)
 
             x1 = x[i] + np.array([np.cos(phi), np.sin(phi)]) * _r
-            # if np.linalg.norm(x1-x0) > 1:
-            if x1[1] > 1:
+            # if x1[1] > 1:
+            if np.linalg.norm(x1-x0) > 1:
                 continue
 
             i1 = grid_x2i(x1, limits=limits, shape=grid.shape)
@@ -162,17 +161,17 @@ def aaa(t):
                     pass
                     # plt.pause(0.001)
 
-            if count == 3000:
+            if count == 20000:
                 break
 
-        if count == 3000:
+        if count == 20000:
             break
 
     return tree
 
 
 # np.random.seed(51)
-tree = aaa(np.pi/8)
+tree = aaa(2*np.pi)
 tree.prune()
 tree.get_depths_max()
 path_i = tree.make_path()
@@ -186,13 +185,13 @@ path = tree.points[path_i]
 
 import axidraw
 
-path = axidraw.drawing.scale2(x=path, size=axidraw.dinA_inch[6], padding=1, keep_aspect=False)
+path = axidraw.drawing.scale2(x=path, size=axidraw.dinA_inch[6], padding=0.5, keep_aspect=True)
 
 
-fig, ax = new_fig(aspect=1)
-ax.set_xlim(0, axidraw.dinA_inch[6][0])
-ax.set_ylim(0, axidraw.dinA_inch[6][1])
-ax.plot(*path.T, color='black', lw=0.5)
+# fig, ax = new_fig(aspect=1)
+# ax.set_xlim(0, axidraw.dinA_inch[6][0])
+# ax.set_ylim(0, axidraw.dinA_inch[6][1])
+# ax.plot(*path.T, color='black', lw=0.5)
 #
 #
 # i = np.random.permutation(np.arange(100, tree.length))[:28]
@@ -203,12 +202,15 @@ ax.plot(*path.T, color='black', lw=0.5)
 
 drawing = axidraw.Drawing([path])
 axidraw.draw(drawing=drawing)
-
-
+#
+# path[:, 1] += 1
+# fig, ax = new_fig(aspect=1)
+# ax.set_xlim(0, axidraw.dinA_inch[6][0])
+# ax.set_ylim(0, axidraw.dinA_inch[6][1])
+# ax.plot(*path.T, color='black', lw=0.5)
 # for i in range(len(path)-1):
 #     ax.plot(*path[i:i+2, :].T, color='black', lw=0.5)
-    # plt.pause(0.01)
-
+#     plt.pause(0.01)
 
 # for tt in [np.pi/15, np.pi/20, np.pi/25]:
 #     aaa(tt)

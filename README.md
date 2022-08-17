@@ -18,4 +18,4 @@ adaptation of [https://github.com/fogleman/axi](https://github.com/fogleman/axi)
 ### todos
 - all of the above
 - +look at [https://github.com/nornagon/saxi](https://github.com/nornagon/saxi) and think about web based user interface
-- 
+- add a gallery to show each picture

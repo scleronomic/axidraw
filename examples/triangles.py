@@ -23,6 +23,7 @@ x = np.array((np.cos(phi), np.sin(phi))).T * r[:, np.newaxis]
 
 phi = np.linspace(0, 2*np.pi, n)
 
+
 def scale2(x, size, padding, keep_aspect=True):
     size, padding = np.atleast_1d(size, padding)
     scale = np.ones(2) * (size - 2*padding)
@@ -34,6 +35,7 @@ def scale2(x, size, padding, keep_aspect=True):
     x *= scale
     x += padding
     return x
+
 
 x = scale2(x=x, size=(4, 4), padding=1)
 fig, ax = new_fig(aspect=1)

@@ -129,6 +129,7 @@ def make_path(pairs):
         stack.append(child)
     return path
 
+
 def main():
     layer = make_layer()
     layer.save('layer.png', 0, 0, W, H, 50)
@@ -140,6 +141,7 @@ def main():
     d.dump('growth.axi')
     d.render(bounds=(0, 0, W, H)).write_to_png('growth.png')
     # axidraw.draw(d)
+
 
 if __name__ == '__main__':
     main()

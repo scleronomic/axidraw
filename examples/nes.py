@@ -160,5 +160,6 @@ def main():
     im = rotated.render(bounds=(x0 - 1, y0 - 1, x1 + 1, y1 + 1))
     im.write_to_png(os.path.join(dirname, 'out.png'))
 
+
 if __name__ == '__main__':
     main()

@@ -1,5 +1,5 @@
 import numpy as np
-from wzk.mpl import new_fig
+from wzk.mpl import new_fig, plt
 
 
 pi = np.pi
@@ -32,20 +32,33 @@ y = np.concatenate([y, np.sin(phi_u)])
 x = np.array((x, y)).T
 
 
-
-
 import axidraw
-x = axidraw.drawing.scale2(x=x, size=axidraw.dinA_inch[3], padding=2, keep_aspect=False)
+# x = axidraw.drawing.scale2(x=x, size=axidraw.dinA_inch[3], padding=2, keep_aspect=False)
 
 
-fig, ax = new_fig(aspect=1)
-ax.set_xlim(0, axidraw.dinA_inch[3][0])
-ax.set_ylim(0, axidraw.dinA_inch[3][1])
-ax.plot(*x.T, color='black')
+# fig, ax = new_fig(aspect=1)
+# ax.set_xlim(0, axidraw.dinA_inch[3][0])
+# ax.set_ylim(0, axidraw.dinA_inch[3][1])
+# ax.plot(*x.T, color='black')
 
 path = [(xx[0], xx[1]) for xx in x]
-drawing = axidraw.Drawing([path])
-axidraw.draw(drawing=drawing)
+path = np.array(path)
+
+
+def plot():
+    fig, ax = new_fig(aspect=1)
+    ax.set_xlim(-1, +1)
+    ax.set_ylim(-1, +1)
+
+    for i in range(len(path)-1):
+        ax.plot(*path[i:i+2, :].T, color='black', lw=0.5)
+        plt.pause(0.1)
+
+
+plot()
+
+# drawing = axidraw.Drawing([path])
+# axidraw.draw(drawing=drawing)
 
 
 # path = np.array(drawing.paths[0])

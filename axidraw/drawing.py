@@ -1,6 +1,4 @@
 import numpy as np
-from wzk.mpl import new_fig
-
 from axidraw.paths import (simplify_paths, sort_paths, join_paths, crop_paths,
                            convex_hull, expand_quadratics, paths_length)
 
@@ -247,39 +245,13 @@ class Drawing(object):
     def render(self, scale=109, margin=1, line_width=0.35/25.4,
                bounds=None, show_bounds=True,
                ax=None):
-        bounds = bounds or self.bounds
-        x1, y1, x2, y2 = bounds
-        w = x2 - x1
-        h = y2 - y1
-        margin *= scale
-        width = scale * w + margin * 2
-        height = scale * h + margin * 2
-
-
-        # if show_bounds:
-        #     dc.set_source_rgb(0.5, 0.5, 0.5)
-        #     dc.set_line_width(1 / scale)
-        #     dc.rectangle(x1, y1, w, h)
-        #     dc.stroke()
-        # dc.set_line_width(line_width)
-        if ax is None:
-            fig, ax = new_fig(aspect=1)
-        for path in self.paths:
-            ax.plot(*np.array(path).T, color='black')
-
-        # for path in self.paths:
-        #     dc.move_to(*path[0])
-        #     for x, y in path:
-        #         dc.line_to(x, y)
-        # dc.stroke()
-        # return surface
+        pass
 
 
 # from wzk import normalize_11
 
 
 def scale2(x, size, padding, mi=None, ma=None, keep_aspect=True):
-
 
     size, padding = np.atleast_1d(size, padding)
     scale = np.ones(2) * (size - 2 * padding)

@@ -127,11 +127,21 @@ def main():
     points, pairs = poisson_disc(0, 0, 11, 8.5, 0.035, 32)
     path = make_path(pairs)
 
+    import numpy as np
+    from wzk.mpl import new_fig, plt
+    path = np.array(path)
+    pp = np.unique(path, axis=0)
+    print(pp.shape)
+    print(path.shape)
+    # fig, ax = new_fig(aspect=1)
+    # for i in range(len(path)-1):
+    #     ax.plot(*path[i:i+2, :].T, color='black', lw=0.5)
+    #     plt.pause(0.01)
     # drawing = axidraw.Drawing([path]).scale_to_fit(11, 8.5)
     # axidraw.draw(drawing=drawing)
 
 
 if __name__ == '__main__':
-    points, pairs = poisson_disc(0, 0, 11, 8.5, 0.035, 32)
-    path = make_path(pairs)
-    # main()
+    # points, pairs = poisson_disc(0, 0, 11, 8.5, 0.035, 32)
+    # path = make_path(pairs)
+    main()
