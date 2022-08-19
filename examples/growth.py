@@ -1,4 +1,7 @@
 import random
+import numpy as np
+from wzk.mpl import new_fig, plt
+
 from collections import defaultdict
 from math import pi, sin, cos, hypot, floor
 from shapely.geometry import LineString
@@ -124,11 +127,11 @@ def make_path(pairs):
 
 def main():
     # random.seed(1182)
-    points, pairs = poisson_disc(0, 0, 11, 8.5, 0.035, 32)
+    # points, pairs = poisson_disc(x1=0, y1=0, x2=11, y2=8.5, r=0.035, n=32)
+    points, pairs = poisson_disc(x1=0, y1=0, x2=11, y2=8.5, r=0.1, n=32)
     path = make_path(pairs)
 
-    import numpy as np
-    from wzk.mpl import new_fig, plt
+
     path = np.array(path)
     pp = np.unique(path, axis=0)
     print(pp.shape)
@@ -137,8 +140,16 @@ def main():
     # for i in range(len(path)-1):
     #     ax.plot(*path[i:i+2, :].T, color='black', lw=0.5)
     #     plt.pause(0.01)
-    # drawing = axidraw.Drawing([path]).scale_to_fit(11, 8.5)
-    # axidraw.draw(drawing=drawing)
+
+    path = axidraw.drawing.scale2(path, size=axidraw.dinA_inch[6], padding=0.5, keep_aspect=True, center=True)
+
+    fig, ax = new_fig(aspect=1)
+    ax.set_xlim(0, axidraw.dinA_inch[6][0])
+    ax.set_ylim(0, axidraw.dinA_inch[6][1])
+    ax.plot(*path.T, color='black', lw=0.5)
+
+    drawing = axidraw.Drawing([path])
+    axidraw.draw(drawing=drawing)
 
 
 if __name__ == '__main__':

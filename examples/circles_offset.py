@@ -2,8 +2,6 @@ import math
 import random
 import axidraw
 
-W, H = axidraw.A3_SIZE
-
 
 def circle_ray_intersection(cx, cy, cr, ox, oy, dx, dy):
     xd = ox - cx
@@ -55,6 +53,9 @@ def main():
         paths.append(path(x0, y0, r0, x1, y1, r1))
         pp = np.array(paths[-1])
         ax.plot(*pp.T, color='black')
+
+    # drawing = axidraw.Drawing([path])
+    # axidraw.draw(drawing=drawing)
 
 
 if __name__ == '__main__':

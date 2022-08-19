@@ -4,7 +4,7 @@ from wzk import grid_x2i, perlin_noise_2d, normalize_01
 from wzk.mpl import new_fig, plt, imshow
 
 
-size = np.array(axidraw.A3_SIZE)
+# size = np.array(axidraw.A3_SIZE)
 
 limits = np.array([[0.0, 1.0],
                    [0.0, 1.0]])
@@ -37,9 +37,9 @@ for j in range(n_steps):
 
 
 
-fig, ax = new_fig(aspect=1)
-ax.set_xlim(0, 1)
-ax.set_ylim(0, 1)
+# fig, ax = new_fig(aspect=1)
+# ax.set_xlim(0, 1)
+# ax.set_ylim(0, 1)
 count = 0
 paths = []
 for xx in x:
@@ -59,7 +59,7 @@ for xx in x:
         pass
 
     paths.append([(xxx[0], xxx[1]) for xxx in xx])
-    ax.plot(*xx.T, color='black', lw=0.1)
+    # ax.plot(*xx.T, color='black', lw=0.1)
 
 
 gg = np.zeros((1000, 1000), dtype=bool)
@@ -74,12 +74,12 @@ for i, p in enumerate(paths):
     gg[ix[:j, 0], ix[:j, 1]] = True
 
 
-threshold = 0.001
-
+# threshold = 0.006
+#
 # path_lengths = np.array([len(p) for p in paths])
 # i_sort = np.argsort(path_lengths)[::-1]
 # paths = [paths[i] for i in i_sort]
-
+#
 #
 # grid2 = [[] for p in paths]
 #
@@ -117,14 +117,15 @@ print(len(paths))
 
 
 fig, ax = new_fig(aspect=1)
-ax.set_xlim(0, size[0])
-ax.set_ylim(0, size[1])
+ax.set_xlim(0, axidraw.dinA_inch[6][0])
+ax.set_ylim(0, axidraw.dinA_inch[6][1])
 
 
+paths2 = []
 for p in paths:
     p = np.array(p)
-    p = axidraw.drawing.scale2(p, size=axidraw.A3_SIZE, padding=1, mi=0.01, ma=0.99, keep_aspect=False)
-
+    p = axidraw.drawing.scale2(p, size=axidraw.dinA_inch[6], padding=0.5, mi=0.01, ma=0.99, keep_aspect=False, center=False)
+    paths2.append(p)
     # paths.append([(xxx[0], xxx[1]) for xxx in xx])
 
     ax.plot(*p.T, color='black', lw=0.1)
@@ -136,23 +137,34 @@ for p in paths:
     #     imshow(ax=ax, img=img, mask=~img, cmap='blue')
 
 
+se = np.array([p[[0, -1], :] for p in paths2])
+
+dm_s = np.linalg.norm(se[:, np.newaxis, :1, :] - se[np.newaxis, :, :, :], axis=-1)
+dm_e = np.linalg.norm(se[:, np.newaxis, 1:, :] - se[np.newaxis, :, :, :], axis=-1)
+
+n = len(dm_s)
+dm_s[range(n), range(n), :] = np.inf
+dm_e[range(n), range(n), :] = np.inf
+l = [0]
+
+for i in range(n):
+
+    dm_s[l[-1]]
+    l[-1]
 
 
 
-d_min = np.inf
-x0 = np.array([p[0] for p in paths])
-x1 = np.array([p[-1] for p in paths])
 
-x01 = np.array([x0, x1])
+def get_lengths(paths):
+    length_travel = np.array([np.array(p0[0]) - np.array(p1[-1]) for p1, p0 in zip(paths[:-1], paths[1:])])
+    length_travel = np.linalg.norm(length_travel, axis=-1).sum()
 
-i = np.arange(len(paths))
+    length_path = np.array([np.linalg.norm(np.diff(p, axis=0), axis=-1).sum() for p in paths])
+    length_path = length_path.sum()
 
-
-dd = x0
-for j in range(len(paths)):
-    pass
-
-
+    print(length_travel, length_path)
+# drawing = axidraw.Drawing(paths2)
+# axidraw.draw(drawing=drawing)
 # TODO
 #    1. make good TSP planner
 #      this can complete in the background, as the first lines are already drawn, the same for pruning ang cleaning of

@@ -177,21 +177,16 @@ tree.get_depths_max()
 path_i = tree.make_path()
 path = tree.points[path_i]
 
-# fig, ax = new_fig(aspect=1)
-# ax.set_xlim(-0.5, 0.5)
-# ax.set_ylim(0, 1)
-# ax.plot(*path.T, color='black', lw=0.5)
 
 
 import axidraw
 
 path = axidraw.drawing.scale2(x=path, size=axidraw.dinA_inch[6], padding=0.5, keep_aspect=True)
 
-
-# fig, ax = new_fig(aspect=1)
-# ax.set_xlim(0, axidraw.dinA_inch[6][0])
-# ax.set_ylim(0, axidraw.dinA_inch[6][1])
-# ax.plot(*path.T, color='black', lw=0.5)
+fig, ax = new_fig(aspect=1)
+ax.set_xlim(0, axidraw.dinA_inch[6][0])
+ax.set_ylim(0, axidraw.dinA_inch[6][1])
+ax.plot(*path.T, color='black', lw=0.5)
 #
 #
 # i = np.random.permutation(np.arange(100, tree.length))[:28]
@@ -200,8 +195,8 @@ path = axidraw.drawing.scale2(x=path, size=axidraw.dinA_inch[6], padding=0.5, ke
 # ax.plot(*pi.T, color='black', ls='', marker='o', markersize=3)
 #
 
-drawing = axidraw.Drawing([path])
-axidraw.draw(drawing=drawing)
+# drawing = axidraw.Drawing([path])
+# axidraw.draw(drawing=drawing)
 #
 # path[:, 1] += 1
 # fig, ax = new_fig(aspect=1)

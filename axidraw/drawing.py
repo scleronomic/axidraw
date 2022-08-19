@@ -251,7 +251,7 @@ class Drawing(object):
 # from wzk import normalize_11
 
 
-def scale2(x, size, padding, mi=None, ma=None, keep_aspect=True):
+def scale2(x, size, padding, mi=None, ma=None, keep_aspect=True, center=True):
 
     size, padding = np.atleast_1d(size, padding)
     scale = np.ones(2) * (size - 2 * padding)
@@ -269,4 +269,12 @@ def scale2(x, size, padding, mi=None, ma=None, keep_aspect=True):
         scale = scale.min()
     x *= scale
     x += padding
+
+    if center:
+        mi = np.array((x[..., 0].min(), x[..., 1].min()))
+        ma = np.array((x[..., 0].max(), x[..., 1].max()))
+        c = mi + (ma - mi)/2
+        c_true = size / 2
+        x += c_true - c
+
     return x

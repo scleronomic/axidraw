@@ -4,6 +4,7 @@ from PIL import Image
 
 import axidraw
 
+
 def create_paths(im):
     f = (255 * 255 * 3) ** 0.5
     paths = []
