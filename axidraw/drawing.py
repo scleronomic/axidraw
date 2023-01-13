@@ -1,10 +1,9 @@
 import numpy as np
+
+from wzk import mpl2, ltd
+
 from axidraw.paths import (simplify_paths, sort_paths, join_paths, crop_paths,
                            convex_hull, expand_quadratics, paths_length)
-
-
-__dinA_inch = [46.81, 33.11, 23.39, 16.54, 11.69, 8.27, 5.83, 4.13, 2.91, 2.05, 1.46, 1.02]
-dinA_inch = {i: (__dinA_inch[i+1], __dinA_inch[i]) for i in range(11)}
 
 
 class Drawing(object):
@@ -40,7 +39,7 @@ class Drawing(object):
         with open(filename, 'r') as fp:
             return cls.loads(fp.read())
 
-    def dumps(self):
+    def dump_str(self):
         lines = []
         for path in self.paths:
             lines.append(' '.join('%f,%f' % (x, y) for x, y in path))
@@ -48,7 +47,7 @@ class Drawing(object):
 
     def dump(self, filename):
         with open(filename, 'w') as fp:
-            fp.write(self.dumps())
+            fp.write(self.dump_str())
 
     def dumps_svg(self, scale=96):
         lines = []
@@ -242,39 +241,93 @@ class Drawing(object):
                 paths.append(path)
         return Drawing(paths)
 
-    def render(self, scale=109, margin=1, line_width=0.35/25.4,
-               bounds=None, show_bounds=True,
+    def render(self, line_width=None,
                ax=None):
-        pass
+        if ax is None:
+            fig, ax = mpl2.new_fig()
+
+        for xx in self.paths:
+            if len(xx) > 1:
+                xx = np.array(xx)
+                ax.plot(*xx.T, color='black')
 
 
-# from wzk import normalize_11
+def paths_wrapper(paths):
+    if not paths:
+        return []
+
+    if isinstance(paths, np.ndarray):
+        if paths.ndim == 1 or paths.shape[1] == 3:
+            paths = [np.array(p) for p in paths]
+        elif paths.ndim == 2:
+            paths = [np.array(paths)]
+        elif paths.ndim == 3:
+            paths = [np.array(p) for p in paths]
+        else:
+            raise ValueError('Invalid paths array')
+
+    elif isinstance(paths, list):
+        if ltd.depth(paths) == 2:
+            paths = [np.array(paths)]
+        elif ltd.depth(paths) == 3:
+            paths = [np.array(p) for p in paths]
+    else:
+        raise ValueError('Invalid paths list')
+
+    return paths
+
+
+def get_min_max(x):
+    x = np.concatenate(x, axis=0).reshape(-1, 2)
+    mi = x.min(axis=0)
+    ma = x.max(axis=0)
+    return mi, ma
 
 
 def scale2(x, size, padding, mi=None, ma=None, keep_aspect=True, center=True):
+    x = paths_wrapper(x)
 
     size, padding = np.atleast_1d(size, padding)
     scale = np.ones(2) * (size - 2 * padding)
+
     if mi is None:
-        mi = np.array((x[..., 0].min(), x[..., 1].min()))
-    x -= mi
+        mi = get_min_max(x)[0]
 
     if ma is None:
-        ma = np.array((x[..., 0].max(), x[..., 1].max()))
-    else:
-        ma = ma - mi
+        ma = get_min_max(x)[1]
 
-    scale = (scale / ma)
+    scale_ = (scale / (ma - mi))
+
     if keep_aspect:
-        scale = scale.min()
-    x *= scale
-    x += padding
+        scale_ = scale_.min()
 
-    if center:
-        mi = np.array((x[..., 0].min(), x[..., 1].min()))
-        ma = np.array((x[..., 0].max(), x[..., 1].max()))
-        c = mi + (ma - mi)/2
-        c_true = size / 2
-        x += c_true - c
+    for i in range(len(x)):
+        xi = x[i]
+        xi -= mi
+
+        xi *= scale_
+        xi += padding
+
+        if center:
+            c = mi + (ma - mi)/2
+            c_true = size / 2
+            xi += c_true - c
+        x[i] = xi
 
     return x
+
+
+def new_fig(size):
+    fig, ax = mpl2.new_fig(aspect=1)
+    ax.set_xlim(0, size[0])
+    ax.set_ylim(0, size[1])
+    return fig, ax
+
+
+def plot_paths(ax, paths, **kwargs):
+
+    kwargs['lw'] = kwargs.pop('lw', 0.1)
+    kwargs['color'] = kwargs.pop('color', 'black')
+    for p in paths:
+        ax.plot(*p.T, **kwargs)
+

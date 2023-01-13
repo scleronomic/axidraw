@@ -1,6 +1,5 @@
 import numpy as np
-from wzk.mpl import new_fig, plt
-
+from wzk import mpl2
 
 pi = np.pi
 
@@ -22,7 +21,7 @@ phi = np.clip(phi, 0, 2*np.pi)
 x = np.cos(phi)
 y = np.sin(phi)
 
-fig, ax = new_fig(aspect=1)
+fig, ax = mpl2.new_fig(aspect=1)
 fig.set_size_inches((10, 10))
 ax.set_axis_off()
 
@@ -46,13 +45,13 @@ path = np.array(path)
 
 
 def plot():
-    fig, ax = new_fig(aspect=1)
+    fig, ax = mpl2.new_fig(aspect=1)
     ax.set_xlim(-1, +1)
     ax.set_ylim(-1, +1)
 
     for i in range(len(path)-1):
         ax.plot(*path[i:i+2, :].T, color='black', lw=0.5)
-        plt.pause(0.1)
+        mpl2.plt.pause(0.1)
 
 
 plot()
@@ -64,4 +63,3 @@ plot()
 # path = np.array(drawing.paths[0])
 # fig, ax = new_fig(aspect=1)
 # ax.plot(*path.T, color='black')
-

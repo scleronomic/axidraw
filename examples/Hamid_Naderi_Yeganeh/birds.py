@@ -1,8 +1,7 @@
 import numpy as np
 from numpy import pi, sin, cos
 
-from wzk import geometry
-from wzk.mpl import new_fig, plot_circles
+from wzk import mpl2
 
 import axidraw
 
@@ -71,14 +70,14 @@ x = np.stack((y, x), axis=1)
 # xx = geometry.string_of_pearls2surface(x[:n][::-1], r[:n][::-1])
 #
 # fig, ax = new_fig(aspect=1)
-# ax.plot(*x[:n].T, color='red')
+# ax.plot(*x[:n].T, color='red')2
 # ax.plot(*xx.T, color='black')
 # plot_circles(x[:n], r[:n], ax=ax, alpha=0.1)
 # plot_circles(x[:n], r[:n]/10, ax=ax, alpha=0.1)
 
 x = axidraw.drawing.scale2(x=x, size=axidraw.dinA_inch[6], padding=0.5, keep_aspect=False)
 
-fig, ax = new_fig(aspect=1)
+fig, ax = mpl2.new_fig(aspect=1)
 ax.set_xlim(0, axidraw.dinA_inch[6][0])
 ax.set_ylim(0, axidraw.dinA_inch[6][1])
 ax.plot(*x.T, color='black')

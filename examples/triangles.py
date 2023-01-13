@@ -1,5 +1,5 @@
 import numpy as np
-from wzk.mpl import new_fig
+from wzk.mpl2 import new_fig
 
 import axidraw
 
@@ -31,4 +31,4 @@ ax.plot(*x.T, color='black')
 
 
 drawing = axidraw.Drawing([x])
-axidraw.draw(drawing=drawing)
+# axidraw.draw(drawing=drawing)

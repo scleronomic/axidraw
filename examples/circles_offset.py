@@ -46,7 +46,7 @@ def main():
     r1 = 2
     paths = []
 
-    from wzk.mpl import new_fig
+    from wzk.mpl2 import new_fig
     import numpy as np
     fig, ax = new_fig(aspect=1)
     for i in range(500):

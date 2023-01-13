@@ -1,5 +1,7 @@
 import numpy as np
-from wzk.mpl import new_fig
+from wzk.mpl2 import new_fig
+
+import axidraw
 
 
 def d_lorenz(x, y, z, s=10, r=28, b=2.667):
@@ -39,20 +41,16 @@ def solve_lorenz(dt=0.001, t=100):
 xs, ys, zs = solve_lorenz(dt=0.001, t=100)
 
 
-x = np.array(((xs+ys) / 1.5, zs)).T
+path = np.array(((xs+ys) / 1.5, zs)).T
 
 
-
-import axidraw
-
-x = axidraw.drawing.scale2(x, size=axidraw.A3_SIZE, padding=1, keep_aspect=False)
-
-# fig, ax = new_fig(aspect=1)
-# ax.set_xlim(0, axidraw.A3_SIZE[0])
-# ax.set_ylim(0, axidraw.A3_SIZE[1])
-# ax.plot(*x.T, lw=0.5, color='black')
+path = axidraw.drawing.scale2(x=path, size=axidraw.dinA_inch[3], padding=2, keep_aspect=False)
+fig, ax = new_fig(aspect=1)
+ax.set_xlim(0, axidraw.dinA_inch[3][0])
+ax.set_ylim(0, axidraw.dinA_inch[3][1])
+ax.plot(*path.T, lw=0.5, color='black')
 
 
-path = [(xx[0], xx[1]) for xx in x]
-drawing = axidraw.Drawing([path])
-axidraw.draw(drawing=drawing)
+# path = [(xx[0], xx[1]) for xx in path]
+# drawing = axidraw.Drawing([x])
+# axidraw.draw(drawing=drawing)

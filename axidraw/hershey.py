@@ -5,11 +5,15 @@ import itertools
 import string
 
 
+# TODO ÄÖÜß
+
 def text(s, font=FUTURAL, spacing=0, extra=0):
     result = []
     x = 0
     for ch in s:
         index = ord(ch) - 32
+
+        print('index', index)
         if index < 0 or index >= 96:
             x += spacing
             continue
@@ -24,9 +28,9 @@ def text(s, font=FUTURAL, spacing=0, extra=0):
     return result
 
 
-def _word_wrap(text, width, measure_func):
+def _word_wrap(t, width, measure_func):
     result = []
-    for line in text.split('\n'):
+    for line in t.split('\n'):
         fields = itertools.groupby(line, lambda x: x.isspace())
         fields = [''.join(g) for _, g in fields]
         if len(fields) % 2 == 1:
@@ -59,22 +63,22 @@ class Font(object):
         d = d.scale(self.scale)
         return d
 
-    def justify_text(self, text, width):
-        d = self.text(text)
+    def justify_text(self, t, width):
+        d = self.text(t)
         w = d.width
-        spaces = text.count(' ')
+        spaces = t.count(' ')
         if spaces == 0 or w >= width:
             return d
         e = ((width - w) / spaces) / self.scale
-        d = Drawing(text(text, self.font, extra=e))
+        d = Drawing(text(t, self.font, extra=e))
         d = d.scale(self.scale)
         return d
 
-    def measure(self, text):
-        return self.text(text).size
+    def measure(self, t):
+        return self.text(t).size
 
-    def wrap(self, text, width, line_spacing=1, align=0, justify=False):
-        lines = _word_wrap(text, width, self.measure)
+    def wrap(self, t, width, line_spacing=1, align=0, justify=False):
+        lines = _word_wrap(t, width, self.measure)
         ds = [self.text(line) for line in lines]
         max_width = max(d.width for d in ds)
         if justify:
@@ -95,10 +99,25 @@ class Font(object):
         return result
 
 
-def main():
-    import axidraw
-    TEXT = 'Hello World'
-    font = Font(axidraw.FUTURAL, 14)
-    d = font.wrap(TEXT, 11.5, 1.5, justify=True)
-    d = d.center(12, 8.5)
-    d.render(bounds=axidraw.V3_BOUNDS).write_to_png('out.png')
+def get_number_of_letters():
+    font_list = [ASTROLOGY, CURSIVE,
+                 CYRILC_1, CYRILLIC,
+                 FUTURAL, FUTURAM,
+                 GOTHGBT, GOTHGRT, GOTHICENG, GOTHICGER, GOTHITT,
+                 GREEK, GREEKC, GREEKS,
+                 JAPANESE,
+                 MARKERS,
+                 MATHLOW, MATHUPP,
+                 METEOROLOGY,
+                 MUSIC,
+                 ROWMAND, ROWMANS, ROWMANT,
+                 SCRIPTC, SCRIPTS,
+                 SYMBOLIC,
+                 TIMESG, TIMESI, TIMESIB, TIMESR, TIMESRB]
+
+    for font in font_list:
+        print(len(font))
+
+
+if __name__ == '__main__':
+    get_number_of_letters()

@@ -19,6 +19,7 @@ from .paths import (
 from .planner import Planner
 from .turtle import Turtle
 
-from .drawing import dinA_inch
-
 from .hershey import text, Font
+from .hershey_fonts import *
+
+from .units import *

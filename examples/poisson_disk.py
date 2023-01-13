@@ -1,6 +1,6 @@
 import numpy as np
-from wzk.numpy2 import grid_x2i
-from wzk.mpl import new_fig, plt, imshow, grid_lines
+from wzk.grid import grid_x2i
+from wzk.mpl2 import new_fig, plt, imshow, grid_lines
 
 
 def ccw(a, b, c):
@@ -13,8 +13,8 @@ def intersect(a, b, c, d):
 
 
 d = 2
-k = 100
-r = 0.05
+k = 10
+r = 0.1
 n = int(np.ceil(np.sqrt(d)/r))
 
 

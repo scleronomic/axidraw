@@ -1,8 +1,8 @@
 pyserial
-pyhull
 shapely
 
-pynput
 numpy
+matplotlib
+
 pillow
 setuptools

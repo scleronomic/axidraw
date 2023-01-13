@@ -17,7 +17,7 @@ class Model(object):
         for px, py, pm in self.particles:
             d = hypot(x - px, y - py)
             if abs(d) < 1e-8:
-                return (0, 0)
+                return 0, 0
             angle = atan2(y - py, x - px)
             dx += pm * cos(angle) / d
             dy += pm * sin(angle) / d

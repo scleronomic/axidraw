@@ -1,5 +1,4 @@
 from math import hypot
-from pyhull.convex_hull import ConvexHull
 from shapely import geometry
 
 from .spatial import Index
@@ -41,6 +40,9 @@ def simplify_paths(paths, tolerance):
 
 
 def sort_paths(paths, reversible=True):
+    if len(paths) == 1:
+        return paths
+
     first = paths[0]
     paths.remove(first)
     result = [first]
