@@ -9,40 +9,7 @@ n_address_lines = 4
 point_size = 12
 
 
-def get_vert_line():
-    vert = np.array([[pad, 2/3],
-                     [1-pad, 2/3]])
-    return [vert]
 
-
-def get_address_lines():
-    paths = []
-    for i in range(n_address_lines):
-        address2 = np.array([[1/2-line_height*i, 2/3+pad],
-                             [1/2-line_height*i, 1-pad]])
-        paths.append(address2)
-
-    return paths
-
-
-def get_address(name1, name2, street, city):
-    font = axidraw.Font(font=axidraw.FUTURAL, point_size=point_size)
-    dy = (2 / 3 + pad) * axidraw.dinA_inch[6][1]
-    dx0 = 2.2
-    path = []
-    path += __get_line(font=font, text=name1, x=dx0, y=dy)
-    path += __get_line(font=font, text=name2, x=dx0 - 1 * line_height*size[0], y=dy)
-    path += __get_line(font=font, text=street, x=dx0 - 2 * line_height*size[0], y=dy)
-    path += __get_line(font=font, text=city, x=dx0 - 3 * line_height*size[0], y=dy)
-
-    return path
-
-
-def __get_line(font, text, x, y, rotate=+90):
-    d = font.wrap(t=text, width=10, line_spacing=1.5, justify=True)
-    d = d.rotate(rotate)
-    d = d.translate(dx=x, dy=y)
-    return d.paths
 
 
 def read_stamp():
@@ -102,18 +69,6 @@ def main():
 #     ax.plot(*path.T, color='k', lw=1)
 
 
-def draw_lines(font, lines, upper_left, lineheight, point_size, rotate=+90):
-    font = axidraw.Font(font=axidraw.FUTURAL, point_size=point_size)
-
-    path = []
-    for i, line in enumerate(lines):
-        y = upper_left[1]
-        x = upper_left[0] - lineheight * i
-        if line == '':
-            continue
-        path += __get_line(font=font, text=line, x=x, y=y, rotate=rotate)
-
-    return path
 
 
 rilke = ['Wunderliches Wort: die Zeit verteiben!',
@@ -136,12 +91,7 @@ rilke = ['Wunderliches Wort: die Zeit verteiben!',
 
 from wzk import geometry
 
-size_dinA6 = axidraw.dinA_inch[6]
-size_dinA5 = axidraw.dinA_inch[5]
-limits_dinA6 = np.array([[0.0, size_dinA6[0]],
-                         [0.0, size_dinA6[1]]])
-limits_dinA5 = np.array([[0.0, size_dinA5[0]],
-                         [0.0, size_dinA5[1]]])
+
 
 
 if __name__ == '__main__':
@@ -153,7 +103,7 @@ if __name__ == '__main__':
 
     fig, ax = axidraw.drawing.new_fig(axidraw.dinA_inch[5])
 
-    # drawing = axidraw.Drawing([geometry.box(limits_dinA5)])
+    # drawing = axidraw.Drawing([geometry.box(axidraw.limits_dinA[5])])
 
     drawing.render(ax=ax)
 

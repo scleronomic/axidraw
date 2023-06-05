@@ -42,15 +42,19 @@ xs, ys, zs = solve_lorenz(dt=0.001, t=100)
 
 
 path = np.array(((xs+ys) / 1.5, zs)).T
+path = path[:, ::-1]
+n2 = len(path)//2
+# ax.plot(*path.T, lw=0.5, color="black")
 
 
-path = axidraw.drawing.scale2(x=path, size=axidraw.dinA_inch[3], padding=2, keep_aspect=False)
+path = axidraw.drawing.scale2(x=path, size=axidraw.dinA_inch[5], padding=0.3, keep_aspect=False)[0]
 fig, ax = new_fig(aspect=1)
-ax.set_xlim(0, axidraw.dinA_inch[3][0])
-ax.set_ylim(0, axidraw.dinA_inch[3][1])
-ax.plot(*path.T, lw=0.5, color='black')
+ax.set_xlim(0, axidraw.dinA_inch[5][0])
+ax.set_ylim(0, axidraw.dinA_inch[5][1])
+ax.plot(*path[:n2].T, lw=0.5, color="red")
+ax.plot(*path[n2:].T, lw=0.5, color="blue")
 
 
-# path = [(xx[0], xx[1]) for xx in path]
-# drawing = axidraw.Drawing([x])
-# axidraw.draw(drawing=drawing)
+drawing = axidraw.Drawing([path[n2:]])
+# drawing = axidraw.Drawing([path[:n2]])
+axidraw.draw(drawing=drawing)

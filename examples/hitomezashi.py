@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from wzk.mpl import new_fig, turn_ticklabels_off, turn_ticks_off, plot_img_patch_w_outlines
+from wzk import mpl2
 
 
 import axidraw
@@ -26,7 +26,7 @@ def to_bool(s, mode=None):
 
 
 def __vowels2bools(s):
-    vowels = 'aeiouäöü'
+    vowels = 'aeiouäöü13579'
     return np.array([ss.lower() in vowels for ss in s])
 
 
@@ -55,15 +55,14 @@ def make_grid(a, b):
 
 def plot_grid(grid):
 
-    fig, ax = new_fig(aspect=1)
+    fig, ax = mpl2.new_fig(aspect=1)
     limits = np.array([[0, grid.shape[0]],
                        [0, grid.shape[1]]])
 
     limits2 = np.array([[0, grid.shape[1]],
                         [0, grid.shape[0]]])
 
-    # imshow(ax=ax, img=grid, limits=limits2, cmap='blue', mask=~grid, alpha=0.5)
-    plot_img_patch_w_outlines(ax=ax, img=grid, limits=limits, alpha_patch=0.5, hatch='//////', lw=0.5)
+    mpl2.plot_img_patch_w_outlines(ax=ax, img=grid, limits=limits, alpha_patch=0.5, hatch='//////', lw=0.5)
     ax.set_xlim(-1, limits[0, 1]+1)
     ax.set_ylim(-1, limits[1, 1]+1)
     # turn_ticklabels_off(ax=ax, axes='xy')
@@ -90,7 +89,7 @@ def plot_stitches(ia, ib):
     y = y[::2, :, :, :]
     y[:, ia, :, 1] += 1
 
-    fig, ax = new_fig(aspect=1)
+    fig, ax = mpl2.new_fig(aspect=1)
 
     def __plot(xx, color):
         for i in range(xx.shape[0]):
@@ -125,15 +124,17 @@ def main(a, b):
     print(ma)
     x_path = axidraw.drawing.scale2(x=x_path, size=axidraw.dinA_inch[6], mi=mi, ma=ma, padding=0.5, keep_aspect=True)
     y_path = axidraw.drawing.scale2(x=y_path, size=axidraw.dinA_inch[6], mi=mi, ma=ma, padding=0.5, keep_aspect=True)
+    x_path = np.array(x_path)
+    y_path = np.array(y_path)
     y_path[:, :, 0] -= (x_path[0, 1, 0] - x_path[0, 0, 0])
     x_path[:, :, 1] += 0.8
     y_path[:, :, 1] += 0.8
     # drawing = axidraw.Drawing(x_path.tolist())  # red
     drawing = axidraw.Drawing(y_path.tolist())  # blue
-    axidraw.draw(drawing=drawing)
+    # axidraw.draw(drawing=drawing)
 
 
-    fig, ax = new_fig(aspect=1, width=axidraw.dinA_inch[6][0], height=axidraw.dinA_inch[6][1])
+    fig, ax = mpl2.new_fig(aspect=1, width=axidraw.dinA_inch[6][0], height=axidraw.dinA_inch[6][1])
     ax.set_xlim(0, axidraw.dinA_inch[6][0])  # TODO turn limits to make it consistent with everything
     ax.set_ylim(0, axidraw.dinA_inch[6][1])
     # TODO turn limits to make it consistent with everything
@@ -167,8 +168,8 @@ if __name__ == '__main__':
     # main(a='Johannes', b='Tenhumberg')
     # main(a='Theresa', b='Tenhumberg')
 
-    main(b='FabianWaldenmaier',
-         a='CharlotteKonkel'[::-1])
+    main(b='SamiMahmoud 18März2023',
+         a='Sonnige Bank im Grünen'[::-1])
 
     # main(b='Ein Teil des Teils der Anfangs alles war',
     #      a='Ein Teil der Finsternis, die sich das Licht gebar')

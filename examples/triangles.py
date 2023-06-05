@@ -24,11 +24,7 @@ x = np.array((np.cos(phi), np.sin(phi))).T * r[:, np.newaxis]
 
 
 x = axidraw.drawing.scale2(x=x, size=axidraw.dinA_inch[6], padding=0.5, keep_aspect=True, center=True)
-fig, ax = new_fig(aspect=1)
-ax.set_xlim(0, axidraw.dinA_inch[6][0])
-ax.set_ylim(0, axidraw.dinA_inch[6][1])
-ax.plot(*x.T, color='black')
 
-
-drawing = axidraw.Drawing([x])
-# axidraw.draw(drawing=drawing)
+drawing = axidraw.Drawing(x)
+drawing.render()
+axidraw.draw(drawing=drawing)

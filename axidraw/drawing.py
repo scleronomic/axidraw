@@ -244,7 +244,7 @@ class Drawing(object):
     def render(self, line_width=None,
                ax=None):
         if ax is None:
-            fig, ax = mpl2.new_fig()
+            fig, ax = mpl2.new_fig(aspect=1)
 
         for xx in self.paths:
             if len(xx) > 1:
@@ -253,7 +253,7 @@ class Drawing(object):
 
 
 def paths_wrapper(paths):
-    if not paths:
+    if paths is None:
         return []
 
     if isinstance(paths, np.ndarray):
@@ -309,9 +309,8 @@ def scale2(x, size, padding, mi=None, ma=None, keep_aspect=True, center=True):
         xi += padding
 
         if center:
-            c = mi + (ma - mi)/2
-            c_true = size / 2
-            xi += c_true - c
+            d = size - ((ma - mi) * scale_ + 2*padding)
+            xi += d/2
         x[i] = xi
 
     return x

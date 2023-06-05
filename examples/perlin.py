@@ -17,8 +17,8 @@ from wzk import np2, mpl2, geometry, grid, perlin_noise_2d, normalize_01
 # size = np.array(axidraw.A3_SIZE)
 
 size_dinA6 = axidraw.dinA_inch[6]
-limits_dinA6 = np.array([[0.0, size_dinA6[0]],
-                         [0.0, size_dinA6[1]]])
+size_dinA5 = axidraw.dinA_inch[5]
+
 size_total = 5 * np.array(axidraw.dinA_inch[6]) - 4 * axidraw.cm2inch
 
 
@@ -301,15 +301,15 @@ def get_part(x, i, j):
 if __name__ == '__main__':
     # main()
 
-    x = np.load('/Users/jote/Documents/Code/Python/axidraw/data/paths.npy', allow_pickle=True)
+    # x = np.load('/Users/jote/Documents/Code/Python/axidraw/data/paths.npy', allow_pickle=True)
+    #
+    # x = axidraw.drawing.scale2(x, size=size_total, padding=axidraw.cm2inch, mi=0.01, ma=0.99, center=False, keep_aspect=False)
+    # x = get_part(x, i=4, j=3)  # vice versa
+    #
+    # fig, ax = axidraw.drawing.new_fig(axidraw.dinA_inch[6])
+    # axidraw.drawing.plot_paths(ax=ax, paths=x, color='k', lw=0.1)
 
-    x = axidraw.drawing.scale2(x, size=size_total, padding=axidraw.cm2inch, mi=0.01, ma=0.99, center=False, keep_aspect=False)
-    x = get_part(x, i=4, j=3)  # vice versa
-
-    fig, ax = axidraw.drawing.new_fig(axidraw.dinA_inch[6])
-    axidraw.drawing.plot_paths(ax=ax, paths=x, color='k', lw=0.1)
-
-    # x = [geometry.box(limits_dinA6)]
+    x = [geometry.box(axidraw.limits_dinA[5])]
 
     drawing = axidraw.Drawing(x)
     drawing = drawing.sort_paths()

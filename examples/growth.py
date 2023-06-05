@@ -1,6 +1,5 @@
 import random
 import numpy as np
-from wzk.mpl import new_fig, plt
 
 from collections import defaultdict
 from math import pi, sin, cos, hypot, floor
@@ -74,8 +73,8 @@ def poisson_disc(x1, y1, x2, y2, r, n):
     grid = Grid(r)
     active = []
     for i in range(1):
-        x = x1 + random.random() * (x2 - x1)
-        y = y1 + random.random() * (y2 - y1)
+        # x = x1 + random.random() * (x2 - x1)
+        # y = y1 + random.random() * (y2 - y1)
         x = (x1 + x2) / 2.0
         y = (y1 + y2) / 2.0
         a = random.random() * 2 * pi
@@ -127,8 +126,8 @@ def make_path(pairs):
 
 def main():
     # random.seed(1182)
-    # points, pairs = poisson_disc(x1=0, y1=0, x2=11, y2=8.5, r=0.035, n=32)
-    points, pairs = poisson_disc(x1=0, y1=0, x2=11, y2=8.5, r=0.1, n=32)
+    points, pairs = poisson_disc(x1=0, y1=0, x2=11, y2=8.5, r=0.035, n=32)
+    # points, pairs = poisson_disc(x1=0, y1=0, x2=11, y2=8.5, r=0.1, n=32)
     path = make_path(pairs)
 
 
@@ -142,14 +141,10 @@ def main():
     #     plt.pause(0.01)
 
     path = axidraw.drawing.scale2(path, size=axidraw.dinA_inch[6], padding=0.5, keep_aspect=True, center=True)
+    drawing = axidraw.Drawing(path)
+    drawing.render()
 
-    fig, ax = new_fig(aspect=1)
-    ax.set_xlim(0, axidraw.dinA_inch[6][0])
-    ax.set_ylim(0, axidraw.dinA_inch[6][1])
-    ax.plot(*path.T, color='black', lw=0.5)
-
-    drawing = axidraw.Drawing([path])
-    axidraw.draw(drawing=drawing)
+    # axidraw.draw(drawing=drawing)
 
 
 if __name__ == '__main__':
