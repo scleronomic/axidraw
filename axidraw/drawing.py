@@ -251,6 +251,7 @@ class Drawing(object):
                 xx = np.array(xx)
                 ax.plot(*xx.T, color='black')
 
+        return ax
 
 def paths_wrapper(paths):
     if paths is None:

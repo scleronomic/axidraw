@@ -23,3 +23,5 @@ from .hershey import text, Font
 from .hershey_fonts import *
 
 from .units import *
+
+from .plotting import plotting
