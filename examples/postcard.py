@@ -9,9 +9,6 @@ n_address_lines = 4
 point_size = 12
 
 
-
-
-
 def read_stamp():
     directory = '/Users/jote/Documents/Code/Python/axidraw/data/svg'
     file = 'birds/bird_7.svg'

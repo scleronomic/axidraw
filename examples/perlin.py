@@ -247,56 +247,6 @@ def main():
     # axidraw.draw(drawing=drawing)
 
 
-def clip2limits(paths, limits):
-    paths2 = []
-    for i, p in enumerate(paths):
-        p = np.array(p)
-
-        above_lower = p >= limits[:, 0]
-        below_lower = ~above_lower
-        below_upper = p <= limits[:, 1]
-        above_upper = ~below_upper
-        if above_lower.all() and below_upper.all():  # all points are within limits
-            paths2.append(p)
-        elif np.logical_or(below_lower, above_upper).all():  # all points are outside limits
-            continue
-        else:  # some points are within limits
-            b = np.logical_and(above_lower, below_upper).sum(axis=-1) == 2
-            j = np2.get_interval_indices(b)
-            for jj in j:
-                paths2.append(p[jj[0]:jj[1]])
-
-    return paths2
-
-
-def translate(paths, offset):
-    paths2 = []
-    for p in paths:
-        p = np.array(p)
-        paths2.append(p + offset)
-    return paths2
-
-
-def get_part(x, i, j):
-
-    e0 = np.array([[1], [0]])
-    e1 = np.array([[0], [1]])
-
-    d0 = (size_dinA6[0] - 1 * axidraw.cm2inch)
-    d1 = (size_dinA6[1] - 1 * axidraw.cm2inch)
-
-    limits_ij = limits_dinA6 + i * e0 * d0 + j * e1 * d1
-    limits_clip = limits_ij.copy()
-    limits_clip[:, 0] += 1 / 2 * axidraw.cm2inch
-
-    x_ij = clip2limits(x, limits_clip)
-    fig, ax = axidraw.drawing.new_fig(size_total)
-    # plot_paths(ax=ax, paths=x, color='k', lw=0.1)
-    mpl2.plot_box(ax=ax, limits=limits_ij, color='r', lw=0.5)
-    x_ij = translate(x_ij, offset=-np.array([i * d0, j * d1]))
-
-    return x_ij
-
 
 if __name__ == '__main__':
     # main()

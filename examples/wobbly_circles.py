@@ -57,18 +57,6 @@ for i in range(0, n_circle, 5):
 
 
 
-def perlin_1d_transition(n):
-    r0 = perlin.perlin_noise_1d(n=n, m=4, scale=1)
-    r1 = perlin.perlin_noise_1d(n=n, m=4, scale=1)
-
-    dr = r1 - r0
-
-    fig, ax = mpl2.new_fig()
-    m = 10
-    for i in range(m):
-        ax.plot(r0 + i*dr/m + i, color="black")
-    ax.plot(r0, color="red")
-    ax.plot(r1 + 10, color="blue")
 
 
 
