@@ -81,6 +81,6 @@ axidraw.drawing.plot_paths(ax=ax, paths=x, color='k', lw=0.1)
 
 # x = [geometry.box(axidraw.limits_dinA[5])]
 drawing = axidraw.Drawing(x)
-drawing = drawing.sort_paths()
-# drawing.render()
-axidraw.draw(drawing=drawing)
+# drawing = drawing.sort_paths()
+drawing.render()
+# axidraw.draw(drawing=drawing)

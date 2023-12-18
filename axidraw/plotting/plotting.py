@@ -60,7 +60,7 @@ def wobbly_circle(n=1000, scale=2.0, mi=None, ma=None):
     return x.T
 
 
-def line_transition(lines, n):
+def line_transition(lines, n, include_end=False):
 
     if len(lines) == 2:
         l0, l1 = lines
@@ -69,16 +69,22 @@ def line_transition(lines, n):
         lines2 = []
         for i in range(n):
             lines2.append(l0 + i/n * dl)
-        lines2.append(l1)
+
+        if include_end:
+            lines2.append(l1)
+
         return np.array(lines2)
 
     else:
         lines2 = []
         m = n // (len(lines) - 1) + 1
         for i in range(len(lines) - 1):
-            lines2.append(line_transition(lines[i:i+2], n=m)[:-1])
+            lines2.append(line_transition(lines[i:i+2], n=m, include_end=False)[:-1])
 
-        return np.array(lines2).reshape((len(lines) - 1) * (m-1), len(lines[0]))
+        if include_end:
+            lines2.append(lines[-1:])
+
+        return np.concatenate(lines2, axis=0)
 
 
 def radial_transition(c0, c1, r, n):

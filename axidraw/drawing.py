@@ -144,7 +144,7 @@ class Drawing(object):
     def simplify_paths(self, tolerance):
         return Drawing(simplify_paths(self.paths, tolerance))
 
-    def sort_paths(self, reversible=True):
+    # def sort_paths(self, reversible=True):
         return Drawing(sort_paths(self.paths, reversible))
 
     def join_paths(self, tolerance):
@@ -241,10 +241,10 @@ class Drawing(object):
                 paths.append(path)
         return Drawing(paths)
 
-    def render(self, line_width=None,
+    def render(self, line_width=None, title=None,
                ax=None):
         if ax is None:
-            fig, ax = mpl2.new_fig(aspect=1)
+            fig, ax = mpl2.new_fig(aspect=1, title=title)
 
         for xx in self.paths:
             if len(xx) > 1:

@@ -4,12 +4,12 @@ from wzk import geometry, perlin, mpl2
 from examples.mijorize import util
 
 
-n = 500
+n = 1000
 n_radius = 1000
 
-n_years = 28
+n_years = 5
 np.random.seed(28)
-r = [axidraw.plotting.get_wobbly_line(n=n, m=10+i, meet_ends="linear-shift", mi=-1, ma=+1, x0=0) for i in range(n_years+1)]
+r = [axidraw.plotting.get_wobbly_line(n=n, m=10+i, meet_ends="linear-shift", mi=-0.3, ma=+0.3, x0=0) for i in range(n_years+1)]
 rr = axidraw.plotting.line_transition(lines=r, n=n_years*12)
 
 x = [np.array([np.linspace(0, 1, n), rrr+i*1/12]) for (i, rrr) in enumerate(rr)]
@@ -31,7 +31,7 @@ drawing1 = axidraw.Drawing(x)
 drawing1.render()
 # drawing1 = drawing1.sort_paths()
 
-axidraw.draw(drawing1)
+# axidraw.draw(drawing1)
 
 
 #

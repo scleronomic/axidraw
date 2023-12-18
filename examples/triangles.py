@@ -4,13 +4,13 @@ from wzk.mpl2 import new_fig
 import axidraw
 
 pi = np.pi
-n = 100
+n = 21
+t = 4380
 
-t = 111111111
-phi0 = np.linspace(0, t*np.pi, n) - 5/6*np.pi
-phi1 = np.linspace(0, t*np.pi, n) - 1/6*np.pi
+phi0 = np.linspace(0, t*np.pi, n) - 5/8*np.pi
+phi1 = np.linspace(0, t*np.pi, n) - 1/8*np.pi
 phi2 = np.linspace(0, t*np.pi, n) + np.pi/2
-r = np.linspace(1, 0.01, n).repeat(3)
+r = np.linspace(1, 0.3, n).repeat(3)
 
 phi = np.zeros(3*n)
 phi[::3] = phi0
@@ -27,4 +27,5 @@ x = axidraw.drawing.scale2(x=x, size=axidraw.dinA_inch[6], padding=0.5, keep_asp
 
 drawing = axidraw.Drawing(x)
 drawing.render()
+# input()
 axidraw.draw(drawing=drawing)

@@ -102,7 +102,7 @@ def get_all_orbits(date):
     return x
 
 
-date = "2023-06-05"
+date = "2021-11-21"
 
 x_all = get_all_orbits(date=date)
 
@@ -142,5 +142,5 @@ drawing = axidraw.Drawing(x)
 
 
 # drawing = axidraw.Drawing([geometry.box(axidraw.limits_dinA[5])])
-# drawing.render()
-axidraw.draw(drawing=drawing)
+drawing.render()
+# axidraw.draw(drawing=drawing)

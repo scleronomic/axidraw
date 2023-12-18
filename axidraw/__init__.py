@@ -25,3 +25,5 @@ from .hershey_fonts import *
 from .units import *
 
 from .plotting import plotting
+
+directory = "/Users/jote/Documents/art/axidraw"
